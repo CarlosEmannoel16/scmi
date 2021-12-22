@@ -1,0 +1,33 @@
+
+{{#showSearch}}
+  {{#resultSearch}}
+  <tr>
+    <td>{{id}}</td>
+    <td>{{description}}</td>
+    <td>{{quantity}}</td>
+    <td>{{price_sale}}</td>
+    <td><a href="/products/{{id}}"><i class="far fa-eye"></i></a></td>
+  </tr>
+  {{/resultSearch}}  
+  {{^resultSearch}}
+  <tr>
+    <td>Produto não encontrado</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  {{/resultSearch}}
+{{/showSearch}}
+
+{{^showSearch}}
+  {{#productSearchResult}}
+    <tr>
+      <td>{{id}}</td>
+      <td>{{description}}</td>
+      <td>{{quantity}}</td>
+      <td>{{price_sale}}</td>
+      <td><a href="/products/{{id}}"><i class="far fa-eye"></i></a></td>
+    </tr>
+  {{/productSearchResult}}
+{{/showSearch}}

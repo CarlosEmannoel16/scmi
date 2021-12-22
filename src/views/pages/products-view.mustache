@@ -1,0 +1,58 @@
+{{>partials/header}}
+<div class="ui grid grid-all-add-products">
+  <!--linhha superior-->
+  <div class="row row-top-bottom-products-add"></div>
+  <!--coluna lateral esquerda-->
+  <div class="two wide column"></div>
+  <!--coluna central-->
+  <div class="twelve wide column shadow-all ">
+    <div class="area-view-products">
+      <div class="column-left">
+        <img class="ui medium rounded image" src="/images/product.jpg">
+      </div>
+     
+      <div class="column-right">
+        {{#product}}
+        <h3 class="ui horizontal divider header"><i class="fas fa-tag"></i>{{description}} </h3>
+        <table class="ui definition table">
+          <tbody>
+            <tr>
+              <td class="two wide column">Valor de compra</td>
+              <td>{{price_buy}}</td>
+            </tr>
+            <tr>
+              <td>Vaslor de Venda</td>
+              <td>{{price_sale}}</td>
+            </tr>
+            <tr>
+              <td>Quantidade</td>
+              <td>{{quantity}}</td>
+            </tr>
+            <tr>
+              <td>Categoria</td>
+              <td>{{number_category}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="optionsOfProduct">
+        <button onclick ="redirectAllProducts()" class="ui black button">Ver todos os produtos</button>
+        <button onclick ="" class="ui orange button">Editar</button>
+        <button onclick ="showDeleteModal()" id="deleteButtonProduct"class="ui red button">Excluir</button>
+      </div>
+        {{/product}}
+      </div>
+    
+    </div>
+
+
+  </div>
+  <!--coluna lateral direira-->
+  <div class="two wide column"></div>
+  <!--linhha inferior-->
+  <div class="row row-top-bottom-products-add"></div>
+
+</div>
+
+
+{{>partials/modal}}
+{{>partials/footer}}

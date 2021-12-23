@@ -22,7 +22,7 @@ export const newProduct = async (req: Request, res: Response) => {
   let number_category = req.body.number_category
 
   if (description && price_buy && price_sale && quantity && number_category) {
-    console.log('passou')
+   
     const productData: ProductInstance = {
       description,
       price_buy,

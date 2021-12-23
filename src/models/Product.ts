@@ -61,7 +61,7 @@ export const productModelActions = {
   },
   registerProduct: async(nameOfProducts: ProductInstance) =>{
    return await Product.create({
-      id: nameOfProducts.id,
+
       description: nameOfProducts.description,
       price_buy: nameOfProducts.price_buy,
       price_sale: nameOfProducts.price_sale,

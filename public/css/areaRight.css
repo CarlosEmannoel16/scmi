@@ -38,6 +38,9 @@ body{
   
 }
 
+.border-radius{
+  border-radius: 10px;
+}
 .column-right{
   width: 70%;
   height: 100%;

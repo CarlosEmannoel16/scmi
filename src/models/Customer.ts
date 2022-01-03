@@ -1,5 +1,5 @@
 import { sequelize } from "../instances/mysql";
-import { Model, DataTypes, Op } from 'sequelize'
+import { Model, DataTypes, Op, where } from 'sequelize'
 
 export interface CustomerInstance extends Model {
   first_name: string,
@@ -26,6 +26,9 @@ export const Customer = sequelize.define<CustomerInstance>('Customer',
     last_name: {
       type: DataTypes.STRING
     },
+    surname:{
+      type: DataTypes.STRING
+    },
     street: {
       type: DataTypes.STRING
     },
@@ -49,6 +52,12 @@ export const Customer = sequelize.define<CustomerInstance>('Customer',
       get() {
         return `${this.first_name} ${this.last_name}`
       }
+    },
+    fullAddress:{
+      type: DataTypes.VIRTUAL,
+      get(){
+        return `${this.street}, ${this.district} - ${this.city} Nº ${this.number}`
+      }
     }
   }, {
   tableName: 'customers',
@@ -56,7 +65,13 @@ export const Customer = sequelize.define<CustomerInstance>('Customer',
 })
 
 export const customerModelActions = {
-
+  getProductById: async (idOfProduct: number)=>{
+    return await Customer.findOne({
+      where:{
+        id: idOfProduct
+      }
+    })
+  },
   getAllCustoemers: async () => {
     return await Customer.findAll()
   },
@@ -64,9 +79,6 @@ export const customerModelActions = {
     return await Customer.findAll({
       where: {
         first_name: {
-          [Op.like]: `%${nameOfCustomer}%`
-        },
-        last_name: {
           [Op.like]: `%${nameOfCustomer}%`
         }
       }
@@ -76,6 +88,7 @@ export const customerModelActions = {
     await Customer.create({
       first_name: dataOfCustomers.first_name,
       last_name: dataOfCustomers.last_name,
+      surname: dataOfCustomers.surname,
       street: dataOfCustomers.street,
       district: dataOfCustomers.district,
       city: dataOfCustomers.city,

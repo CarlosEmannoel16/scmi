@@ -12,9 +12,13 @@ router.post('/new-product', productController.newProduct)
 router.get('/new-product', productController.newProductView)
 router.get('/products/:id', productController.getProductById)
 router.get('/search-product', productController.searchProducts)
+router.post('/edit-product/:id' , productController.editProductAction)
+
 router.get('/customers', customerController.customers)
 router.get('/search-customers', customerController.customersSearch)
 router.post('/new-customer', customerController.newCustomers)
 router.get('/new-customer', customerController.newCustomersView)
+router.get('/customer/:id', customerController.getCustomerById)
+
 
 export default router

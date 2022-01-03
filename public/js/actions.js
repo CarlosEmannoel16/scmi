@@ -2,8 +2,16 @@ function redirectAllProducts(){
   window.location.href = "/product"
 }
 
-$("#deleteButtonProduct").click(function(){
-  $('.ui.basic.modal')
+function redirectAllCustomers(){
+  window.location.href="/customers"
+}
+
+
+
+
+$("#editProductButton").click(function(){
+  $('.ui.modal')
   .modal('show')
 ;
 })
+

@@ -1,16 +1,61 @@
-<div class="ui basic modal">
-  <div class="ui icon header">
-    <i class="fas fa-trash-alt"></i>
-   Você tem certeza que deseja deletar este produto
+<div class="ui modal">
+
+  <div class="header">
+    Editar produto
   </div>
-  <div class="actions">
-    <div class="ui red basic cancel inverted button">
-      <i class="remove icon"></i>
-     não
+  <div class="ui grid">
+    <div class="two wide column">
+      <div class="image content">
+        <div class="ui small image">
+          <img src="/images/product.jpg">
+        </div>
+      </div>
     </div>
-    <div class="ui green ok inverted button">
-      <i class="checkmark icon"></i>
-      sim
+    <div class="fourteen wide column">
+      {{#product}}
+    
+      <form class="ui form  form-add-product" method="post" action="/edit-product/{{id}}">
+        <h1 class="ui dividing header">Cadastro de produtos</h1>
+        <div class="field">
+          <label for="">Descrição do produto </label>
+          <input type="text" name="description" value = "{{description}}" placeholder="Descrição do produto">
+        </div>
+        <div class="fields">
+          <div class="field">
+            <label for="">Valor de Compra</label>
+            <input type="text" name="price_buy" value="{{price_buy}}" step="any" placeholder="Valor de Compra">
+          </div>
+          <div class="field">
+            <label for="">Valor de Venda</label>
+            <input type="text" name="price_sale" value="{{price_sale}}" step="any" placeholder="Valor de Venda">
+          </div>
+          <div class="field">
+            <label for="">Quantidade</label>
+            <input type="number" name="quantity" value={{quantity}} placeholder="Quantidade">
+          </div>
+        </div>
+
+        <div class="filds margin-field-bottom">
+          <div class="field">
+            <label for="">Categorias</label>
+            <select name="number_category" class="ui fluid dropdown" id="">
+              <option value="1">Categoria 1</option>
+              <option value="2">Categoria 2</option>
+            </select>
+          </div>
+        </div>
+        {{/product}}
+        <div class="actions">
+          <div class="ui black deny button">
+          <button type="submit">Alterar</button>
+          </div>
+          <div class="ui positive right labeled icon button">
+           Alterar
+            <i class="checkmark icon"></i>
+          </div>
+      </form>
     </div>
   </div>
+</div>
+
 </div>

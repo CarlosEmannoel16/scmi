@@ -18,6 +18,7 @@ export const newCustomers = async (req: Request, res: Response) => {
   let dataOfCustomer = {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
+    surname: req.body.surname,
     street: req.body.street,
     district: req.body.district,
     city: req.body.city,
@@ -28,7 +29,9 @@ export const newCustomers = async (req: Request, res: Response) => {
 
   if (dataOfCustomer.first_name && dataOfCustomer.last_name && dataOfCustomer.city) {
     await customerModelActions.registerCustomer(dataOfCustomer)
-    res.redirect('/customers')
+    res.redirect('/customer')
+  } else {
+    res.redirect('/new-customer')
   }
 
 }
@@ -37,12 +40,27 @@ export const customersSearch = async (req: Request, res: Response) => {
 
   let showSearch = false
   let showButtonReturn = false
-  let nameCustomer: string = req.query.nameSearch as string
+  let searchCustomer: string = req.query.searchCustomer as string
   let resultSearch
+  let searchResultById: number
 
-  if (nameCustomer) {
-    resultSearch = await customerModelActions.getCustomerByName(nameCustomer)
-    if (resultSearch) {
+  if (searchCustomer) {
+    resultSearch = await customerModelActions.getCustomerByName(searchCustomer)
+    console.log(resultSearch.length)
+    if (resultSearch.length > 0) {
+      showSearch = true
+      showButtonReturn = true
+    } else if (resultSearch.length == 0) {
+      searchResultById = parseInt(searchCustomer)
+      if(!isNaN(searchResultById)){
+        resultSearch = await customerModelActions.getProductById(searchResultById)
+        showSearch = true
+        showButtonReturn = true
+      }else{
+        showSearch = true
+        showButtonReturn = true
+      }
+    } else {
       showSearch = true
       showButtonReturn = true
     }
@@ -54,5 +72,20 @@ export const customersSearch = async (req: Request, res: Response) => {
     showSearch,
     resultSearch
   })
+}
+
+export const getCustomerById = async (req: Request, res: Response) => {
+
+  let idOfProduct: number = parseInt(req.params.id)
+  let dataCustomer
+
+  if (idOfProduct) {
+    dataCustomer = await customerModelActions.getProductById(idOfProduct)
+  }
+
+  res.render('pages/customer-view', {
+    dataCustomer
+  })
+
 }
 

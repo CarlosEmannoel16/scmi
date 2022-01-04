@@ -1,21 +1,95 @@
 {{>partials/header}}
-<div class="ui grid grid-all-add-products">
-  <!--linhha superior-->
-  <div class="row row-top-bottom-products-add"></div>
-  <!--coluna lateral esquerda-->
-  <div class="two wide column"></div>
-  <!--coluna central-->
-  <div class="twelve wide column shadow-all ">
-    <div class="area-view-products">
-      <div class="column-left">
-        <img class="ui medium rounded image" src="/images/product.jpg">
+{{#product}}
+<div class="ui  centered grid">
+  <div class="middle aligned row  rowTitle ">
+    <div class="left aligned column centered">
+      <h3>Informações do produto</h3>
+    </div>
+  </div>
+</div>
+<div class="ui five column centered grid" style="margin-top:20px; padding: 0;">
+  <div class=" column cardsProduct color-1 shadow-all">
+    <div class="">
+      <h1 class="color-white">
+        123
+      </h1>
+      <span class="color-white">
+        Vendas desse Produto
+      </span>
+    </div>
+    <div class="row option-card">
+      Nova Venda +
+    </div>
+  </div>
+  <div class="column cardsProduct color-4 shadow-all">
+    <div class="">
+      <h1 class="color-white">
+        {{quantity}}
+      </h1>
+      <span class="color-white">
+        Quantidade em estoque
+      </span>
+    </div>
+    <div class="row option-card">
+      Mais Informações
+    </div>
+  </div>
+  <div class="column cardsProduct color-3 shadow-all">
+    <div class="">
+      <h1 class="color-white">
+        123
+      </h1>
+      <span class="color-white">
+        Vendas desse Produto
+      </span>
+    </div>
+    <div class="row option-card">
+      Nova Venda +
+    </div>
+  </div>
+  <div class="column cardsProduct color-2 shadow-all">
+    <div class="">
+      <h1 class="color-white">
+        123
+      </h1>
+      <span class="color-white">
+        Vendas desse Produto
+      </span>
+    </div>
+    <div class="row option-card">
+      Nova Venda +
+    </div>
+  </div>
+</div>
+
+
+<div class="ui  centered grid">
+  <div class="row">
+    <div class="six wide column  shadow-all" style="margin:10px; padding: 0;">
+
+
+      <div class="ui two column centered grid" style="padding: 10px;">
+        <div class="column" style="text-align: left;">
+          <h3> <i class="fas fa-info-circle"></i> Informações do Produto</h3>
+        </div>
+        <div class="column" style="text-align: right;">
+          <i class="fas fa-list fa-2x" id="btnReturnAllProducts" style="margin-left: 5px; "></i>
+          <i class="fas fa-edit fa-2x " id="editProductButton" style="margin-left: 5px; "></i>
+          <i class="fas fa-trash-alt fa-2x pointer" id="deleteButtonProduct" style="margin-left: 5px; "></i>
+        </div>
+
       </div>
-     
-      <div class="column-right">
-        {{#product}}
-        <h3 class="ui horizontal divider header"><i class="fas fa-tag"></i>{{description}} </h3>
-        <table class="ui definition table">
+
+      <hr>
+
+      <div class="row">
+
+        <table class="ui  definition table" style="margin-top: 5px;">
           <tbody>
+            <tr>
+              <td class="two wide column">Descrição</td>
+              <td>{{description}}</td>
+            </tr>
             <tr>
               <td class="two wide column">Valor de compra</td>
               <td>{{price_buy}}</td>
@@ -34,25 +108,20 @@
             </tr>
           </tbody>
         </table>
-        <div class="optionsOfProduct">
-        <button onclick ="redirectAllProducts()" class="ui black button">Ver todos os produtos</button>
-        <button id="editProductButton" class="ui orange button">Editar</button>
-        <button onclick ="showDeleteModal()" id="deleteButtonProduct"class="ui red button">Excluir</button>
       </div>
-        {{/product}}
-      </div>
-    
+
     </div>
-
-
+    <div class="seven wide column  shadow-all" style="margin: 10px; padding: 0;">
+      <div class="ui one column centered grid" style="padding: 10px;">
+        <div class="column" style="text-align: left;">
+          <h3> <i class="fas fa-info-circle"></i> Estatisticas</h3>
+        </div>
+      </div>
+      <hr>
+    </div>
   </div>
-  <!--coluna lateral direira-->
-  <div class="two wide column"></div>
-  <!--linhha inferior-->
-  <div class="row row-top-bottom-products-add"></div>
-
 </div>
-
-
+</div>
+{{/product}}
 {{>partials/modal}}
 {{>partials/footer}}

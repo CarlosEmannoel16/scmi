@@ -90,5 +90,15 @@ export const productModelActions = {
         }
       })
 
+  },
+
+  deleteProductById: async (id: number)=>{
+
+    await Product.destroy({
+      where:{
+        id
+      }
+    })
+
   }
 }

@@ -12,4 +12,7 @@ Sistema em desenvolvimento utilizando recursos que estou aprendendo e colocando 
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"  height="20px"/>
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"  height="20px"/>
    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="20px"/>
+<<<<<<< Updated upstream
  
+=======
+>>>>>>> Stashed changes

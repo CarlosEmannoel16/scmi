@@ -13,6 +13,7 @@ router.get('/new-product', productController.newProductView)
 router.get('/products/:id', productController.getProductById)
 router.get('/search-product', productController.searchProducts)
 router.post('/edit-product/:id' , productController.editProductAction)
+router.get('/deleteProduct/:id',productController.deleteProductAction)
 
 router.get('/customers', customerController.customers)
 router.get('/search-customers', customerController.customersSearch)

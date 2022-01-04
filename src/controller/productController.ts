@@ -14,6 +14,7 @@ export const newProductView = (req: Request, res: Response) => {
 }
 export const newProduct = async (req: Request, res: Response) => {
 
+  let showAdd = false
   let description = req.body.description
   let price_buy = req.body.price_buy
   let price_sale = req.body.price_sale
@@ -32,9 +33,12 @@ export const newProduct = async (req: Request, res: Response) => {
     } as ProductInstance
 
     await productModelActions.registerProduct(productData)
+    showAdd = true
   }
 
-  res.render("pages/product-add")
+  res.render("pages/product-add", {
+    showAdd
+  })
 
 }
 
@@ -44,11 +48,16 @@ export const getProductById = async (req: Request, res: Response) => {
 
   if (idProduct) {
     product = await productModelActions.getProductById(idProduct)
+    if (product) {
+      res.render('pages/products-view', {
+        product
+      })
+    }else{
+      res.redirect('/product')
+    }
   }
 
-  res.render('pages/products-view', {
-    product
-  })
+
 
 }
 
@@ -91,12 +100,12 @@ export const searchProducts = async (req: Request, res: Response) => {
 export const editProductAction = async (req: Request, res: Response) => {
   let showUpdate = false
   let id: number = parseInt(req.params.id)
-  if (!isNaN(id)) {
+  if (id) {
     let productResult = await productModelActions.getProductById(id)
     let dataOfProduct = {
       description: req.body.description,
-      price_buy: parseInt(req.body.price_buy.replace('R$', '')),
-      price_sale: parseInt(req.body.price_sale.replace('R$', '')),
+      price_buy: parseFloat(req.body.price_buy.replace('R$', '').replace(',', '.')),
+      price_sale: parseFloat(req.body.price_sale.replace('R$', '').replace(',', '.')),
       quantity: parseInt(req.body.quantity),
       number_category: req.body.number_category
     } as ProductInstance
@@ -107,5 +116,17 @@ export const editProductAction = async (req: Request, res: Response) => {
       res.redirect(`/products/${id}`)
 
     }
+  } else {
+
   }
+}
+
+export const deleteProductAction = async (req: Request, res: Response) => {
+
+  let id: number = parseInt(req.params.id)
+  if (id) {
+    await productModelActions.deleteProductById(id)
+    res.redirect('/product')
+  }
+
 }

@@ -6,6 +6,7 @@ import path from 'path'
 import { truncate } from 'fs'
 
 
+
 dotenv.config()
 const server = express()
 server.use(express.static(path.join(__dirname, '../public')))

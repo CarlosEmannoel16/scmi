@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { sequelize } from '../instances/mysql'
+import * as verification from '../helpers/verification'
 import { productModelActions, ProductInstance } from '../models/Product'
+
+
+
 export const product = async (req: Request, res: Response) => {
 
   const productSearchResult = await productModelActions.getAllProducts()
@@ -20,15 +24,17 @@ export const newProduct = async (req: Request, res: Response) => {
   let price_sale = req.body.price_sale
   let quantity = req.body.quantity
   let number_category = req.body.number_category
+  let minimum_quantity = req.body.minimum_quantity
 
   if (description && price_buy && price_sale && quantity && number_category) {
 
     const productData: ProductInstance = {
       description,
-      price_buy,
-      price_sale,
+      price_buy: parseFloat(price_buy.replace('.', '').replace(',','.')),
+      price_sale:parseFloat(price_sale.replace('.', '').replace(',','.')),
       quantity,
-      number_category
+      number_category,
+      minimum_quantity
 
     } as ProductInstance
 
@@ -49,10 +55,12 @@ export const getProductById = async (req: Request, res: Response) => {
   if (idProduct) {
     product = await productModelActions.getProductById(idProduct)
     if (product) {
-      res.render('pages/products-view', {
-        product
+        let checkStock = verification.checkIfStockIsLow(product.quantity, product.minimum_quantity)
+        res.render('pages/products-view', {
+        product,
+        checkStock
       })
-    }else{
+    } else {
       res.redirect('/product')
     }
   }
@@ -98,27 +106,25 @@ export const searchProducts = async (req: Request, res: Response) => {
 
 
 export const editProductAction = async (req: Request, res: Response) => {
-  let showUpdate = false
   let id: number = parseInt(req.params.id)
   if (id) {
     let productResult = await productModelActions.getProductById(id)
-    let dataOfProduct = {
-      description: req.body.description,
-      price_buy: parseFloat(req.body.price_buy.replace('R$', '').replace(',', '.')),
-      price_sale: parseFloat(req.body.price_sale.replace('R$', '').replace(',', '.')),
-      quantity: parseInt(req.body.quantity),
-      number_category: req.body.number_category
-    } as ProductInstance
-    console.log(dataOfProduct)
     if (productResult) {
-      await productModelActions.updateProduct(id, dataOfProduct)
-      showUpdate = true
-      res.redirect(`/products/${id}`)
+      let dataOfProduct = {
+        description: req.body.description,
+        price_buy: parseInt(req.body.price_buy.replace('R$', '').replace('.','').replace(',','.')),
+        price_sale: parseInt(req.body.price_sale.replace('R$', '').replace('.','').replace(',','.')),
+        quantity: parseInt(req.body.quantity),
+        number_category: req.body.number_category
+      } as ProductInstance
+       
+      if(verification.priceBuyBigThePriceSale(dataOfProduct.price_buy, dataOfProduct.price_sale)){
+        await productModelActions.updateProduct(id, dataOfProduct)
+      }
 
     }
-  } else {
-
-  }
+  } 
+  res.redirect('/product')
 }
 
 export const deleteProductAction = async (req: Request, res: Response) => {

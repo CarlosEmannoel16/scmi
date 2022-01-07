@@ -7,7 +7,8 @@ export interface ProductInstance extends Model {
   price_buy: number,
   price_sale: number,
   quantity: number,
-  number_category: number
+  number_category: number,
+  minimum_quantity: number
 }
 export const Product = sequelize.define<ProductInstance>('Product',
   {
@@ -31,11 +32,15 @@ export const Product = sequelize.define<ProductInstance>('Product',
       get() {
         return this.getDataValue('price_sale').toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
       }
+      
     },
     quantity: {
       type: DataTypes.INTEGER
     },
     number_category: {
+      type: DataTypes.INTEGER
+    },
+    minimum_quantity:{
       type: DataTypes.INTEGER
     }
   }, {
@@ -69,7 +74,9 @@ export const productModelActions = {
       price_buy: dataOfProducts.price_buy,
       price_sale: dataOfProducts.price_sale,
       quantity: dataOfProducts.quantity,
-      number_category: dataOfProducts.number_category
+      number_category: dataOfProducts.number_category,
+      minimum_quantity: dataOfProducts.minimum_quantity
+      
     })
 
   },

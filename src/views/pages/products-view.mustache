@@ -65,10 +65,10 @@
 
 <div class="ui  centered grid">
   <div class="row">
-    <div class=" areaAllInfor six wide column  shadow-all" >
-     <hr class="hrTitle">
+    <div class=" areaAllInfor six wide column  shadow-all">
+      <hr class="hrTitle">
       <div class="row titleInfor">
-        <div class="ui two column centered grid paddingPrimary" >
+        <div class="ui two column centered grid paddingPrimary">
           <div class="column" style="text-align: left;">
             <h3> <i class="fas fa-info-circle"></i> Informações do Produto</h3>
           </div>
@@ -77,62 +77,83 @@
             <i class="fas fa-edit fa-2x " id="editProductButton" style="margin-left: 5px; "></i>
             <i class="fas fa-trash-alt fa-2x pointer" id="deleteButtonProduct" style="margin-left: 5px; "></i>
           </div>
-  
+
         </div>
       </div>
+      <div class="row bodyInfor">
+        <div class="row">
 
-      <div class="row">
-
-        <table class="ui  definition table" style="margin-top: 5px;">
-          <tbody>
-            <tr>
-              <td class="two wide column">Descrição</td>
-              <td>{{description}}</td>
-            </tr>
-            <tr>
-              <td class="two wide column">Valor de compra</td>
-              <td>{{price_buy}}</td>
-            </tr>
-            <tr>
-              <td>Vaslor de Venda</td>
-              <td>{{price_sale}}</td>
-            </tr>
-            <tr>
-              <td>Quantidade</td>
-              <td>{{quantity}}</td>
-            </tr>
-            <tr>
-              <td>Categoria</td>
-              <td>{{number_category}}</td>
-            </tr>
-          </tbody>
-        </table>
+          <table class="ui  definition table" style="margin-top: 5px;">
+            <tbody>
+              <tr>
+                <td class="two wide column">Descrição</td>
+                <td>{{description}}</td>
+              </tr>
+              <tr>
+                <td class="two wide column">Valor de compra</td>
+                <td>{{price_buy}}</td>
+              </tr>
+              <tr>
+                <td>Vaslor de Venda</td>
+                <td>{{price_sale}}</td>
+              </tr>
+              <tr>
+                <td>Quantidade</td>
+                <td>{{quantity}}</td>
+              </tr>
+              <tr>
+                <td>Categoria</td>
+                <td>{{number_category}}</td>
+              </tr>
+              <tr>
+                <td>Estoque Mínimo</td>
+                <td>{{minimum_quantity}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
     <div class="one column">
 
     </div>
-    <div class=" areaAllInfor seven wide column  shadow-all" >
+    <div class=" areaAllInfor seven wide column  shadow-all">
       <hr class="hrTitle">
       <div class="row titleInfor">
-      <div class="ui one column centered grid paddingPrimary" >
-        <div class="column" style="text-align: left;">
-          <h3> <i class="fas fa-info-circle"></i> Estatisticas</h3>
+        <div class="ui one column centered grid paddingPrimary">
+          <div class="column" style="text-align: left;">
+            <h3> <i class="fas fa-info-circle"></i> Estatisticas</h3>
+          </div>
         </div>
       </div>
-      </div>
+
+      <div class="row bodyInfor">
+
+        {{#checkStock}}
+        <div class="ui visible message">
+          <p>Produto com estoque acabando</p>
+        </div>
+        {{/checkStock}}
+
+        {{#checkProfit.status}}
+        <div class="ui olive visible message">
+          {{checkProfit.message}}
+        </div>
+        {{/checkProfit.status}}
+        {{^checkProfit.status}}
+        <div class="ui red visible message">
+          {{checkProfit.message}}
+        </div>
+        {{/checkProfit.status}}
+          
     
 
-      {{#checkStock}}
-      <div class="row">
-        Produto com Baixo Estoque!
       </div>
-      {{/checkStock}}
+      <div class="row bodyInfor">
+      </div>
     </div>
   </div>
-</div>
-</div>
-{{/product}}
-{{>partials/modal}}
-{{>partials/footer}}
+  {{/product}}
+  {{>partials/modal}}
+  {{>partials/footer}}

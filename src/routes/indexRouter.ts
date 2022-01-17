@@ -2,6 +2,7 @@ import {Router} from 'express'
 import * as homeController from '../controller/homeController'
 import * as productController from '../controller/productController'
 import * as customerController from  '../controller/customerController'
+import * as saleController from '../controller/saleController'
 
 
 const router = Router()
@@ -20,6 +21,10 @@ router.get('/search-customers', customerController.customersSearch)
 router.post('/new-customer', customerController.newCustomers)
 router.get('/new-customer', customerController.newCustomersView)
 router.get('/customer/:id', customerController.getCustomerById)
+
+router.get('/sale', saleController.viewSale)
+router.get('/sale/:cod', saleController.saleVerificationProduct)
+router.post('/saleRender', saleController.saleRenderProduct)
 
 
 export default router

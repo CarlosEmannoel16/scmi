@@ -183,3 +183,73 @@ height: 200px;
   justify-content: center;
   text-align: center;
 }
+
+
+.card-option-home{
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  margin: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  
+}
+
+.all-home{
+  height: 100%;
+}
+
+
+.area-left-pdv{
+  background-color: #fff;
+  padding: 10px;
+  height: 80vh;
+}
+.area-right-pdv{
+  background-color: #fff;
+padding: 10px;
+ height: 80vh;
+}
+.title-pdv{
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 5vh;
+}
+
+.title-pdv-product{
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.pdv-infor-products{
+  overflow: auto;
+  height: 90%;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #000;
+}
+
+.options-pdv{
+  height: 200px;
+}
+
+.bnt-options-pdv{
+  margin: 10px;
+  background-color: #8a8888;
+  color: #fff;
+  text-align: center !important;
+  border-radius: 3px;
+}
+
+.input-add-code{
+  width:90%;
+}
+.valueSale{
+  text-align: right;
+}

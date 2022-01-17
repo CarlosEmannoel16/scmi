@@ -88,7 +88,8 @@ export const productModelActions = {
         price_buy: dataOfProducts.price_buy,
         price_sale: dataOfProducts.price_sale,
         quantity: dataOfProducts.quantity,
-        number_category: dataOfProducts.number_category
+        number_category: dataOfProducts.number_category,
+        minimum_quantity: dataOfProducts.minimum_quantity
 
       },
       {

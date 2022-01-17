@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { sequelize } from '../instances/mysql'
 import * as verification from '../helpers/verification'
+import * as formatNumber  from  '../helpers/formatNumber'
 import { productModelActions, ProductInstance } from '../models/Product'
 
 
@@ -8,6 +9,7 @@ import { productModelActions, ProductInstance } from '../models/Product'
 export const product = async (req: Request, res: Response) => {
 
   const productSearchResult = await productModelActions.getAllProducts()
+ 
 
   res.render("pages/products", {
     productSearchResult
@@ -30,8 +32,8 @@ export const newProduct = async (req: Request, res: Response) => {
 
     const productData: ProductInstance = {
       description,
-      price_buy: parseFloat(price_buy.replace('.', '').replace(',','.')),
-      price_sale:parseFloat(price_sale.replace('.', '').replace(',','.')),
+      price_buy: formatNumber.removeSpecialCharactersAndConvertToInt(price_buy),
+      price_sale: formatNumber.removeSpecialCharactersAndConvertToInt(price_sale),
       quantity,
       number_category,
       minimum_quantity
@@ -55,10 +57,12 @@ export const getProductById = async (req: Request, res: Response) => {
   if (idProduct) {
     product = await productModelActions.getProductById(idProduct)
     if (product) {
-        let checkStock = verification.checkIfStockIsLow(product.quantity, product.minimum_quantity)
-        res.render('pages/products-view', {
+      let checkStock = verification.checkIfStockIsLow(product.quantity, product.minimum_quantity)
+      let checkProfit = verification.checkProfit(product.price_buy, product.price_sale)
+      res.render('pages/products-view', {
         product,
-        checkStock
+        checkStock,
+        checkProfit
       })
     } else {
       res.redirect('/product')
@@ -112,20 +116,22 @@ export const editProductAction = async (req: Request, res: Response) => {
     if (productResult) {
       let dataOfProduct = {
         description: req.body.description,
-        price_buy: parseInt(req.body.price_buy.replace('R$', '').replace('.','').replace(',','.')),
-        price_sale: parseInt(req.body.price_sale.replace('R$', '').replace('.','').replace(',','.')),
+        price_buy: formatNumber.removeSpecialCharactersAndConvertToInt(req.body.price_buy),
+        price_sale: formatNumber.removeSpecialCharactersAndConvertToInt(req.body.price_sale),
         quantity: parseInt(req.body.quantity),
-        number_category: req.body.number_category
+        number_category: req.body.number_category,
+        minimum_quantity: req.body.minimum_quantity
       } as ProductInstance
-       
-      if(verification.priceBuyBigThePriceSale(dataOfProduct.price_buy, dataOfProduct.price_sale)){
+
+      if (true /*verification.priceBuyBigThePriceSale(dataOfProduct.price_buy, dataOfProduct.price_sale)*/) {
         await productModelActions.updateProduct(id, dataOfProduct)
+        console.log(dataOfProduct)
       }
 
     }
-  } 
+  }
   res.redirect('/product')
-}
+} 
 
 export const deleteProductAction = async (req: Request, res: Response) => {
 

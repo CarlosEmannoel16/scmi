@@ -1,0 +1,52 @@
+{{>partials/header}}
+
+<div class="ui middle aligned  grid centered all-home ">
+  <div class="row  title-pdv">
+    Caixa
+  </div>
+  <div class="row ">
+    <div class="seven wide  column area-left-pdv  shadow-all">
+      
+      <div class="column pdv-infor-products ">
+        <table class="ui basic table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nome</th>
+              <th>Quantidade</th>
+              <th>Valor Un</th>
+            </tr>
+          </thead>
+          <tbody class="pdv-infor-products-table">
+           
+          </tbody>
+        </table>
+       
+      </div>
+
+      <div class="row">
+        <div class="column valueSale">
+          <h1 class="amountSale">R$ 3.900</h1>
+        </div>
+      </div>
+    </div>
+    <div class="five wide  column  area-right-pdv shadow-all">
+      <div class="ui middle aligned  grid centered options-pdv">
+        <div class="row">
+          <div class="ui input input-add-code">
+            <input type="text" placeholder="Cod de produto" id="inpuCodProduct">
+          </div>
+        </div>
+        <button class="bnt-options-pdv" id="btnAddProductSale">
+          Adicionar
+        </button>
+        <div class=" four wide column  bnt-options-pdv ">
+          Informações do produto
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{{>partials/footer}}
+<script src="/js/sale.js"></script>

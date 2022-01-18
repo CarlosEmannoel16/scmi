@@ -1,12 +1,14 @@
 {{>partials/header}}
 
 <div class="ui middle aligned  grid centered all-home ">
-  <div class="row  title-pdv">
-    Caixa
-  </div>
-  <div class="row ">
-    <div class="seven wide  column area-left-pdv  shadow-all">
-      
+
+  <div class="row">
+    <div class="row  title-pdv">
+      Caixa
+    </div>
+
+    <div class="eight wide  column area-left-pdv  shadow-all">
+
       <div class="column pdv-infor-products ">
         <table class="ui basic table">
           <thead>
@@ -18,35 +20,56 @@
             </tr>
           </thead>
           <tbody class="pdv-infor-products-table">
-           
+
           </tbody>
         </table>
-       
+
       </div>
 
       <div class="row">
         <div class="column valueSale">
-          <h1 class="amountSale">R$ 3.900</h1>
+          <h1>Total: </h1>
+          <h1 class="amountSale"></h1>
         </div>
       </div>
     </div>
-    <div class="five wide  column  area-right-pdv shadow-all">
+    <div class="six wide  column  area-right-pdv shadow-all">
       <div class="ui middle aligned  grid centered options-pdv">
-        <div class="row">
-          <div class="ui input input-add-code">
-            <input type="text" placeholder="Cod de produto" id="inpuCodProduct">
+        <div class="row rowInputCodProduct">
+          <div class="ui left icon input  input-add-code">
+            <input type="text" placeholder="Código do produto" id="inpuCodProduct">
+            <i class="search icon"></i>
+          </div>
+        </div>  
+        <div class="row rowOptionsSale">
+          <div class=" five wide column" id="columnQuantity">
+            <button class="fluid ui button" id="btnQuantityProductSale"> Quantidade  </button>
+          </div>
+          <div class=" five wide column">
+            <button class="fluid ui teal button"> </button>
+          </div>
+          <div class=" five wide column">
+            <button class="fluid ui blue button"> Buscar Produto <br> (F1)   </button>
           </div>
         </div>
-        <button class="bnt-options-pdv" id="btnAddProductSale">
-          Adicionar
-        </button>
-        <div class=" four wide column  bnt-options-pdv ">
-          Informações do produto
+       
+        <div class="row rowOptionsSale">
+          <div class=" five wide column">
+            <button class="fluid ui red button"> Cancelar Venda <br> (F8) </button>
+          </div>
+          <div class=" five wide column">
+            <button class="fluid orange ui button"> Deletar Produto <br> (F9) </button>
+          </div>
+          <div class=" five wide column">
+            <button class="fluid ui green button" id="closingSale"> Encerrar Venda <br> (F10) </button>
+          </div>
         </div>
+
       </div>
 
     </div>
   </div>
+
 </div>
 {{>partials/footer}}
 <script src="/js/sale.js"></script>

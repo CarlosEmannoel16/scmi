@@ -216,7 +216,12 @@ padding: 10px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 5vh;
+  height: 8vh;
+  background-color: #00b4fc;
+  color: #fff;
+  font-weight: bold;
+  width: 100%;
+  font-size: 2.5rem;
 }
 
 .title-pdv-product{
@@ -250,6 +255,37 @@ padding: 10px;
 .input-add-code{
   width:90%;
 }
+
+
+
+
 .valueSale{
+
   text-align: right;
+}
+
+.valueSale h1{
+  display: inline-block;
+  margin: 5px;
+}
+.rowInputCodProduct{
+  height: 10vh;
+}
+.rowOptionsSale{
+  height: 20vh;
+}
+
+.rowOptionsSale .column{
+  height: 100%;
+}
+
+.rowOptionsSale button{
+  height: 100%;
+}
+
+.inputQuantitySale{
+  height: 100%;
+  width: 100%;
+  font-size: 4.0rem;
+  text-align: center;
 }

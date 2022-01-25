@@ -23,8 +23,11 @@ router.get('/new-customer', customerController.newCustomersView)
 router.get('/customer/:id', customerController.getCustomerById)
 
 router.get('/sale', saleController.viewSale)
-router.get('/sale/:cod', saleController.saleVerificationProduct)
-router.post('/saleRender', saleController.saleRenderProduct)
+router.post('/sale', saleController.saleVerificationProduct)
+router.post('/sale-product-delete', saleController.saleDeleteProduct)
+router.post('/sale-product-all', saleController.getAllProductsSession)
+router.post('/cancel-sale', saleController.cancelSale)
+
 
 
 export default router

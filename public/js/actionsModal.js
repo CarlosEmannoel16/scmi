@@ -1,12 +1,17 @@
 
-$("#editProductButton").click(function(){
+$("#editProductButton").click(function () {
   $('.modalEdit')
-  .modal('show')
-;
+    .modal('show')
+    ;
 })
 
-$("#deleteButtonProduct").click(function(){
+$("#deleteButtonProduct").click(function () {
   $('.mini.modal')
-  .modal('show')
-;
+    .modal('show')
+    ;
 })
+
+
+
+
+

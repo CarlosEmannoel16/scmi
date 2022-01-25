@@ -49,6 +49,15 @@ export const Product = sequelize.define<ProductInstance>('Product',
 })
 
 export const productModelActions = {
+
+   getProductSale: async(id: number)=>{
+    return await Product.findOne({
+      attributes:['id','description', 'price_sale', 'quantity'],
+      where:{
+        id
+      }
+    })
+   },
   getProductById: async (idOfProducts: number) => {
     return await Product.findOne({
       where: {

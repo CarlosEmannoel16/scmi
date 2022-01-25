@@ -8,5 +8,6 @@ export const sequelize = new Sequelize(
   process.env.MYSQL_PASSWORD as string
 ,{
   dialect: 'mysql',
+  storage:'./session.mysql',
   port: parseInt(process.env.MYSQL_PORT as string)
 })

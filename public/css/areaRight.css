@@ -1,3 +1,7 @@
+*{
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
 body{
   height: 100%;
   color: rgb(49, 49, 49);
@@ -237,7 +241,19 @@ padding: 10px;
   height: 90%;
   width: 100%;
   background-color: #fff;
-  border: 1px solid #000;
+  border: 3px solid #000;
+  text-align: center;
+}
+
+.freeBoxMessage{
+  height: 80%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  font-size: x-large;
+
 }
 
 .options-pdv{
@@ -254,6 +270,7 @@ padding: 10px;
 
 .input-add-code{
   width:90%;
+
 }
 
 
@@ -284,6 +301,13 @@ padding: 10px;
 }
 
 .inputQuantitySale{
+  height: 100%;
+  width: 100%;
+  font-size: 4.0rem;
+  text-align: center;
+}
+
+.inputDeleteSale{
   height: 100%;
   width: 100%;
   font-size: 4.0rem;

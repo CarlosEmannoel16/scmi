@@ -1,7 +1,18 @@
-document.getElementById('btnReturnAllProducts').addEventListener('click', (event)=>{
-  event.preventDefault()
-  window.location.href="/product"
-}, true)
+
+$(document).ready(function(){
+  $('#price_buy').money('000.000.000')
+})
+
+
+let btnReturnAllProducts = document.getElementById('btnReturnAllProducts')
+
+if(btnReturnAllProducts){
+  btnReturnAllProducts.addEventListener('click', (event)=>{
+    event.preventDefault()
+    window.location.href="/product"
+  })
+}
+
 
 function redirectAllCustomers(){
   window.location.href="/customers"

@@ -1,28 +1,37 @@
 document.getElementById('inpuCodProduct').focus()
 const inpuCodProduct = document.querySelector('#inpuCodProduct')
 const inputAddCodeArea = document.querySelector('.input-add-code')
-window.onload = async () => {
-  let products = await requestGetAllProduct()
-  let session = products.session
-  if (session.length > 0) {
-    await loadAllProducts()
-  }
+const areaLeftPdv = document.querySelector('.area-left-pdv')
+const rowOptionsSaleCloseSale = document.querySelector('.rowOptionsSaleCloseSale')
 
+window.onload = async () => {
+ 
+  await loadAllProducts()
+F
 }
 
 
 //Funções 
 
 const productsInSession = () => {
-  let freeBoxMessage = document.querySelector('.freeBoxMessage').style.display='none'
- 
+  document.querySelector('.freeBoxMessage').style.display = 'none'
 }
 
+const noProductInSession = () => {
+
+}
+
+
 const loadAllProducts = async () => {
-  productsInSession()
   let products = await requestGetAllProduct()
-  addProductsOnViewOnload(products.session)
-  document.querySelector('.amountSale').innerHTML = products.amountSale
+  if (products.session.length > 0) {
+    productsInSession()
+    addProductsOnViewOnload(products.session)
+    document.querySelector('.amountSale').innerHTML = products.amountSale
+  } else {
+    document.querySelector('.freeBoxMessage').style.display = 'flex'
+    document.querySelector('.amountSale').innerHTML = ''
+  }
 
 }
 
@@ -100,10 +109,10 @@ const createLine = async (product) => {
   let tdValueUni = document.createElement('td')
   let tdValueAmount = document.createElement('td')
 
-  tdId.innerHTML = `${product.id}`
+  tdId.innerHTML = `${product.idUnique}`
   tdName.innerHTML = `${product.description}`
-  tdQuantity.innerHTML = `${product.quantity}`
-  tdValueUni.innerHTML = `${product.price_sale}`
+  tdQuantity.innerHTML = `${product.quantitySale}`
+  tdValueUni.innerHTML = `${product.priceSale}`
   tdValueAmount.innerHTML = `${product.amount}`
 
   tr.insertAdjacentElement('beforeend', tdId)
@@ -191,9 +200,9 @@ let closeSale = () => {
 //Eventos de click
 
 document.querySelector('#closingSale').addEventListener('click', async () => {
-
-
-  inputAddCodeArea.innerHTML= ''
+  rowOptionsSaleCloseSale.style.display = 'block'
+  areaLeftPdv.remove()
+  inputAddCodeArea.remove()
 })
 
 document.querySelector('#btnQuantityProductSale').addEventListener('click', () => {

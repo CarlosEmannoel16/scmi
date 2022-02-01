@@ -9,11 +9,12 @@ import { SaleActions } from '../models/Sale'
 export const viewSale = async (req: Request, res: Response) => {
   // const saleData = await Sale.findAll( {include:[{model:SaleDetails}], where:{id:3}}) 
   //req.session.destroy((err) => { })
+  let Sale = new SaleActions(req, res)
+  console.log(typeof Sale.getCodesWithoudRepetition())
 
-  console.log(req.session.sale)
   res.render('pages/sale', {
 
-  })
+  }) 
 }
 
 export const saleVerificationProduct = async (req: Request, res: Response) => {
@@ -26,7 +27,6 @@ export const saleVerificationProduct = async (req: Request, res: Response) => {
       parseInt(quantity)
       let Sale = new SaleActions(req, res, cod, product, quantity)
       if (Sale.insertInSession()) {
-        console.log(Sale.sumAllProducts())
         res.json({
           session: req.session.sale,
           currentProduct: Sale.prepareSessionToReturnToCustomer(),

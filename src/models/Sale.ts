@@ -76,7 +76,6 @@ export class SaleActions implements SaleActionInstance {
   cod?: number
 
   constructor(req: Request, res: Response, cod: number | undefined = undefined, product: ProductInstance | undefined = undefined, quantity: number = 1) {
-
     this.product = product
     this.quantity = quantity
     this.req = req
@@ -91,7 +90,7 @@ export class SaleActions implements SaleActionInstance {
     if (this.cod) {
       let productsSesison = this.getProductSession()
       productsSesison.map((item, index) => {
-        if (item.id == this.cod) {
+        if (item.idUnique == this.cod) {
           productsSesison.splice(index, 1)
           status = true
           return
@@ -104,14 +103,22 @@ export class SaleActions implements SaleActionInstance {
   }
 
   verifyQuantityProduct(): boolean | undefined {
+
     if (this.product && this.quantity) {
       return this.product.quantity < this.quantity ? false : true
     }
+
+
   }
+
+
+
+ 
+
   getProductSession() {
-    let dataSesison: any[] = []
-    if (this.req.session.sale) return dataSesison = this.req.session.sale
-    return dataSesison
+    let dataSession: any[] = []
+    if (this.req.session.sale) return dataSession = this.req.session.sale
+    return dataSession
   }
 
 
@@ -120,28 +127,45 @@ export class SaleActions implements SaleActionInstance {
       let priceSale = removeSpecialCharactersAndConvertToInt(this.product.price_sale.toString()) * this.quantity
       return priceSale
     }
+  }
 
+
+
+
+  getCodesWithoudRepetition():number[] {
+    let products = this.getProductSession()
+    let codes: number[] = []
+
+    products.forEach((item) => {
+      codes.push(item.id)
+    })
+
+    return  codes.filter((item, index, array) => {
+      return array.indexOf(item) == index
+    })
 
   }
+
+
+
 
   prepareSessionToReturnToCustomer() {
     if (this.product) {
       if (this.verifyQuantityProduct()) {
         let amount = formatMoney(this.multiplyValueByQuantity() as number)
-
         let idProductSession = this.getProductSession().length
-        let id = this.product.getDataValue('id') + idProductSession + Math.random() *  900 | 0
+        let id = this.product.getDataValue('id')
+        let idUnique = this.product.getDataValue('id') + idProductSession + Math.random() * 900 | 0
         let description = this.product.getDataValue('description')
-        let price_sale = formatMoney(this.product.getDataValue('price_sale'))
-        let quantity = this.quantity
-        let product = { id, description, price_sale, quantity, amount }
+        let priceSale = formatMoney(this.product.getDataValue('price_sale'))
+        let quantitySale = this.quantity
+        let product = { id, idUnique, description, priceSale, quantitySale, amount }
         return product
       } else {
         return false
       }
     }
   }
-
 
 
   sumAllProducts() {
@@ -167,6 +191,7 @@ export class SaleActions implements SaleActionInstance {
       let dataSession = this.getProductSession()
       let dataProduct = this.prepareSessionToReturnToCustomer()
       dataSession.unshift(dataProduct)
+
       this.req.session.sale = dataSession
       return true
     } else {

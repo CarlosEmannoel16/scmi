@@ -14,7 +14,8 @@ dotenv.config()
 
 declare module 'express-session'{
   interface Session{
-    sale: any[]
+    sale: any[],
+    quantitySale: number[]
   }
 }
 

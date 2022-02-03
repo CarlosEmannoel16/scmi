@@ -1,4 +1,4 @@
-<h2>Sistema de contrle para pequenas empresas</h2>
+<h2>Sistema de controle para pequenas empresas</h2>
 <hr>
 
 instalar modulos - npm install <br>

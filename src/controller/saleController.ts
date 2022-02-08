@@ -1,44 +1,48 @@
 
 import { Request, Response } from 'express'
 import validator from 'validator'
-import { productModelActions, ProductInstance } from '../models/Product'
+import { productModelActions } from '../models/Product'
 import flash from 'connect-flash'
 import { SaleActions } from '../models/Sale'
 
 
 export const viewSale = async (req: Request, res: Response) => {
   // const saleData = await Sale.findAll( {include:[{model:SaleDetails}], where:{id:3}}) 
-  //req.session.destroy((err) => { })
+  //req.session.destroy((Ferr) => { })
   let Sale = new SaleActions(req, res)
-  console.log(typeof Sale.getCodesWithoudRepetition())
+  console.log(Sale.getQuantitySession())
+ 
 
   res.render('pages/sale', {
 
-  }) 
+  })
 }
 
 export const saleVerificationProduct = async (req: Request, res: Response) => {
-
   let cod = req.body.cod
   let quantity = req.body.quantity
   if (validator.isInt(cod) && validator.isInt(quantity)) {
     let product = await productModelActions.getProductSale(cod)
+
     if (product) {
       parseInt(quantity)
       let Sale = new SaleActions(req, res, cod, product, quantity)
       if (Sale.insertInSession()) {
         res.json({
-          session: req.session.sale,
-          currentProduct: Sale.prepareSessionToReturnToCustomer(),
+          session: Sale.getSessionToCustomer(),
+          currentProduct: Sale.productToSession(),
           amountSale: Sale.sumAllProducts(),
           statusAdd: 1
         })
+
         return true
       }
       return true
     }
+
   }
   res.json({ statusAdd: 0 })
+
 
 }
 
@@ -46,7 +50,7 @@ export const saleDeleteProduct = async (req: Request, res: Response) => {
 
   let cod = req.body.cod
   let Sale = new SaleActions(req, res, cod)
-  console.log(Sale.getProductSession())
+
   if (validator.isInt(cod) && Sale.getProductSession().length > 0) {
     let status = Sale.deleteProduct()
     res.json({ statusSale: status })

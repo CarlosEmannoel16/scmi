@@ -7,15 +7,17 @@ import session from 'express-session'
 import { sequelize } from './instances/mysql'
 import sequelizeStore from 'connect-session-sequelize'
 import flash from 'connect-flash';
+import { quantitySaleInterface} from './models/Sale'
 
 let storage = sequelizeStore(session.Store)
 
 dotenv.config()
 
+
 declare module 'express-session'{
   interface Session{
     sale: any[],
-    quantitySale: number[]
+    quantitySale: quantitySaleInterface[]
   }
 }
 

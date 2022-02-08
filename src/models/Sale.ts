@@ -5,10 +5,6 @@ import { SaleDetails, SaleDetailsInstance } from './SaleDetails'
 import { ProductInstance } from './Product'
 
 import { removeSpecialCharactersAndConvertToInt, formatMoney } from '../helpers/formatNumber'
-import { product } from '../controller/productController'
-
-
-
 
 
 export interface SaleInstance extends Model {
@@ -67,13 +63,22 @@ interface SaleActionInstance {
   cod?: number
 }
 
-export class SaleActions implements SaleActionInstance {
 
+export interface quantitySaleInterface {
+  id: number,
+  quantityStock: number
+}
+
+
+
+
+export class SaleActions implements SaleActionInstance {
   product?: ProductInstance
   quantity?: number
   req: Request
   res: Response
   cod?: number
+
 
   constructor(req: Request, res: Response, cod: number | undefined = undefined, product: ProductInstance | undefined = undefined, quantity: number = 1) {
     this.product = product
@@ -102,25 +107,61 @@ export class SaleActions implements SaleActionInstance {
     return status
   }
 
-  verifyQuantityProduct(): boolean | undefined {
-
+  verifyQuantityProductAndUpdate(): boolean | undefined {
     if (this.product && this.quantity) {
-      return this.product.quantity < this.quantity ? false : true
+
+   
+      let idProduct = this.product.id;
+      let quantity =  this.quantity
+    
+
+      if (this.getQuantitySession().length > 0) {
+
+        ///   PEGAR A QUANTIDADE E O CÓDIGO DOS PRODUTOS ADICIONADOS
+        let codesAndQuantity = this.getQuantitySession()
+
+
+        let codes = codesAndQuantity.map(item => {
+          return item.id
+        })
+
+        if (codes.indexOf(idProduct) == -1) { 
+
+          codesAndQuantity.push({
+            id: this.product.id,
+            quantityStock: this.product.quantity - this.quantity
+          })
+          console.log(codesAndQuantity)
+          this.req.session.quantitySale = codesAndQuantity
+          return true
+
+        } else {
+          let updateQuantity = codesAndQuantity.map(item => {
+            if(item.id == idProduct){
+              item.quantityStock -= quantity
+              return item
+            }else{
+              return item
+            }
+          })
+          console.log(updateQuantity)
+          this.req.session.quantitySale = updateQuantity
+        
+        }
+
+      }else{
+        let codesAndQuantity = this.getQuantitySession()
+        codesAndQuantity.push({
+          id: this.product.id,
+          quantityStock: this.product.quantity - this.quantity
+        })
+        console.log(codesAndQuantity)
+        this.req.session.quantitySale = codesAndQuantity
+      }
     }
 
 
   }
-
-
-
- 
-
-  getProductSession() {
-    let dataSession: any[] = []
-    if (this.req.session.sale) return dataSession = this.req.session.sale
-    return dataSession
-  }
-
 
   multiplyValueByQuantity(): number | undefined {
     if (this.product && this.quantity) {
@@ -130,43 +171,61 @@ export class SaleActions implements SaleActionInstance {
   }
 
 
+  getProductSession() {
+    let dataSession: any[] = []
+    if (this.req.session.sale) return dataSession = this.req.session.sale
+    return dataSession
+  }
 
+  getSessionToCustomer() {
 
-  getCodesWithoudRepetition():number[] {
     let products = this.getProductSession()
-    let codes: number[] = []
-
-    products.forEach((item) => {
-      codes.push(item.id)
+    let dataProductsForCustomer = products.map((item) => {
+      delete item.quantityStock
+      return item
     })
-
-    return  codes.filter((item, index, array) => {
-      return array.indexOf(item) == index
-    })
-
   }
 
 
+  getQuantitySession() {
+    let dataQuantity: quantitySaleInterface[] = []
+    if (this.req.session.quantitySale) return dataQuantity = this.req.session.quantitySale
+    return dataQuantity
+  }
+
+  insertQuantityInSession(data: quantitySaleInterface[]) {
+    this.req.session.quantitySale = data
+  }
 
 
-  prepareSessionToReturnToCustomer() {
+  prepareProductToSession(): boolean | any {
     if (this.product) {
-      if (this.verifyQuantityProduct()) {
+     
+        let quantityInStock = this.product.quantity
         let amount = formatMoney(this.multiplyValueByQuantity() as number)
         let idProductSession = this.getProductSession().length
-        let id = this.product.getDataValue('id')
-        let idUnique = this.product.getDataValue('id') + idProductSession + Math.random() * 900 | 0
-        let description = this.product.getDataValue('description')
-        let priceSale = formatMoney(this.product.getDataValue('price_sale'))
+        let id = this.product.id
+        let idUnique = this.product.id + idProductSession + Math.random() * 900 | 0
+        let description = this.product.description
+        let priceSale = formatMoney(this.product.price_sale)
         let quantitySale = this.quantity
-        let product = { id, idUnique, description, priceSale, quantitySale, amount }
+
+        let product = { id, idUnique, description, priceSale, quantitySale, amount, quantityInStock }
         return product
-      } else {
-        return false
       }
-    }
+    
+    return false
   }
 
+
+  productToSession() {
+    let dataProduct = this.prepareProductToSession()
+    if (dataProduct) {
+      delete dataProduct.quantityStock
+      return dataProduct
+    }
+
+  }
 
   sumAllProducts() {
     let products = this.getProductSession()
@@ -182,25 +241,23 @@ export class SaleActions implements SaleActionInstance {
     } else {
       return 0
     }
-
-
   }
+
+
 
   insertInSession() {
-    if (this.verifyQuantityProduct()) {
-      let dataSession = this.getProductSession()
-      let dataProduct = this.prepareSessionToReturnToCustomer()
-      dataSession.unshift(dataProduct)
 
-      this.req.session.sale = dataSession
-      return true
-    } else {
-      return false
-    }
+    let dataSession = this.getProductSession()
+    let dataProduct = this.prepareProductToSession()
+    dataSession.unshift(dataProduct)
+    this.req.session.sale = dataSession
+    this.verifyQuantityProductAndUpdate()
 
+    return true
   }
-}
 
+
+}
 
 
 

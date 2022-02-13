@@ -11,7 +11,7 @@ export const viewSale = async (req: Request, res: Response) => {
   //req.session.destroy((Ferr) => { })
   let Sale = new SaleActions(req, res)
   console.log(Sale.getQuantitySession())
- 
+
 
   res.render('pages/sale', {
 
@@ -32,19 +32,21 @@ export const saleVerificationProduct = async (req: Request, res: Response) => {
           session: Sale.getSessionToCustomer(),
           currentProduct: Sale.productToSession(),
           amountSale: Sale.sumAllProducts(),
-          statusAdd: 1
+          statusAdd: 1,
         })
 
         return true
+      } else {
+        res.json({ statusAdd: 0, message: 'Estoque Indisponível' })
       }
       return true
     }
 
   }
-  res.json({ statusAdd: 0 })
-
+  res.json({ statusAdd: 0, message: 'Produto não encontrado' })
 
 }
+
 
 export const saleDeleteProduct = async (req: Request, res: Response) => {
 

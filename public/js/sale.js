@@ -74,10 +74,10 @@ const requestSessionSale = async (cod, quantity) => {
 
     let dataFetchProduct = await response.json()
     let statusRequest = dataFetchProduct.statusAdd
-    if (statusRequest) {
+    if (statusRequest == 1) {
       return dataFetchProduct
     } else {
-      alert('Produto não encontrado')
+      alert(dataFetchProduct.message)
     }
 
   } catch (err) {

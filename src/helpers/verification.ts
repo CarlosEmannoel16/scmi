@@ -1,4 +1,4 @@
-import { removeSpecialCharactersAndConvertToInt } from './formatNumber'
+import { removeSpecialCharactersAndConvertToFloat } from './formatNumber'
 
 export const priceBuyBigThePriceSale = (priceBuy: number, priceSale: number) => {
   return priceBuy <= priceSale ? true : false
@@ -10,7 +10,7 @@ export const checkIfStockIsLow = (quantityInStock: number, minimumAmountAllowed:
 
 export const checkProfit = (priceBuy: number, priceSale: number) => {
 
-  let profit = removeSpecialCharactersAndConvertToInt(priceSale.toString()) - removeSpecialCharactersAndConvertToInt(priceBuy.toString())
+  let profit = removeSpecialCharactersAndConvertToFloat(priceSale.toString()) - removeSpecialCharactersAndConvertToFloat(priceBuy.toString())
 
   if (profit > 0) {
     let data = {

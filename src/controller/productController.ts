@@ -1,15 +1,16 @@
 import { Request, Response } from 'express'
 import { sequelize } from '../instances/mysql'
 import * as verification from '../helpers/verification'
-import * as formatNumber  from  '../helpers/formatNumber'
+import * as formatNumber from '../helpers/formatNumber'
 import { productModelActions, ProductInstance } from '../models/Product'
+import validator from 'validator'
 
 
 
 export const product = async (req: Request, res: Response) => {
 
   const productSearchResult = await productModelActions.getAllProducts()
- 
+
 
   res.render("pages/products", {
     productSearchResult
@@ -18,9 +19,11 @@ export const product = async (req: Request, res: Response) => {
 export const newProductView = (req: Request, res: Response) => {
   res.render("pages/product-add")
 }
+
 export const newProduct = async (req: Request, res: Response) => {
 
   let showAdd = false
+
   let description = req.body.description
   let price_buy = req.body.price_buy
   let price_sale = req.body.price_sale
@@ -29,24 +32,28 @@ export const newProduct = async (req: Request, res: Response) => {
   let minimum_quantity = req.body.minimum_quantity
 
   if (description && price_buy && price_sale && quantity && number_category) {
+   
+      const productData: ProductInstance = {
+        description,
+        price_buy: formatNumber.removeSpecialCharactersAndConvertToFloat(price_buy),
+        price_sale: formatNumber.removeSpecialCharactersAndConvertToFloat(price_sale),
+        quantity,
+        number_category,
+        minimum_quantity
 
-    const productData: ProductInstance = {
-      description,
-      price_buy: formatNumber.removeSpecialCharactersAndConvertToInt(price_buy),
-      price_sale: formatNumber.removeSpecialCharactersAndConvertToInt(price_sale),
-      quantity,
-      number_category,
-      minimum_quantity
+      } as ProductInstance
 
-    } as ProductInstance
+      await productModelActions.registerProduct(productData)
 
-    await productModelActions.registerProduct(productData)
-    showAdd = true
+  } else {
+    req.flash('exceptions', 'Revise os Campos e tente novamente')
   }
 
   res.render("pages/product-add", {
-    showAdd
+    showAdd,
+    exception: req.flash('exceptions')
   })
+
 
 }
 
@@ -116,8 +123,8 @@ export const editProductAction = async (req: Request, res: Response) => {
     if (productResult) {
       let dataOfProduct = {
         description: req.body.description,
-        price_buy: formatNumber.removeSpecialCharactersAndConvertToInt(req.body.price_buy),
-        price_sale: formatNumber.removeSpecialCharactersAndConvertToInt(req.body.price_sale),
+        price_buy: formatNumber.removeSpecialCharactersAndConvertToFloat(req.body.price_buy),
+        price_sale: formatNumber.removeSpecialCharactersAndConvertToFloat(req.body.price_sale),
         quantity: parseInt(req.body.quantity),
         number_category: req.body.number_category,
         minimum_quantity: req.body.minimum_quantity
@@ -131,7 +138,7 @@ export const editProductAction = async (req: Request, res: Response) => {
     }
   }
   res.redirect('/product')
-} 
+}
 
 export const deleteProductAction = async (req: Request, res: Response) => {
 

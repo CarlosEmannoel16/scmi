@@ -1,4 +1,4 @@
-import { Model, DataTypes, Op, where } from 'sequelize'
+import { Model, DataTypes, Op, where, Sequelize } from 'sequelize'
 import { sequelize, } from '../instances/mysql'
 
 export interface ProductInstance extends Model {
@@ -32,7 +32,7 @@ export const Product = sequelize.define<ProductInstance>('Product',
       get() {
         return this.getDataValue('price_sale').toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
       }
-      
+
     },
     quantity: {
       type: DataTypes.INTEGER
@@ -40,7 +40,7 @@ export const Product = sequelize.define<ProductInstance>('Product',
     number_category: {
       type: DataTypes.INTEGER
     },
-    minimum_quantity:{
+    minimum_quantity: {
       type: DataTypes.INTEGER
     }
   }, {
@@ -50,14 +50,20 @@ export const Product = sequelize.define<ProductInstance>('Product',
 
 export const productModelActions = {
 
-   getProductSale: async(id: number)=>{
+
+  getCountProduct: async () => {
+  return  await Product.count()
+   
+  },
+
+  getProductSale: async (id: number) => {
     return await Product.findOne({
-      attributes:['id','description', 'price_sale', 'quantity'],
-      where:{
+      attributes: ['id', 'description', 'price_sale', 'quantity'],
+      where: {
         id
       }
     })
-   },
+  },
   getProductById: async (idOfProducts: number) => {
     return await Product.findOne({
       where: {
@@ -85,12 +91,10 @@ export const productModelActions = {
       quantity: dataOfProducts.quantity,
       number_category: dataOfProducts.number_category,
       minimum_quantity: dataOfProducts.minimum_quantity
-      
-    })
 
+    })
   },
   updateProduct: async (id: number, dataOfProducts: ProductInstance) => {
-
     await Product.update(
       {
         description: dataOfProducts.description,
@@ -103,22 +107,28 @@ export const productModelActions = {
       },
       {
         where: {
-         id
+          id
         }
       })
-
   },
 
-  deleteProductById: async (id: number)=>{
-
+  deleteProductById: async (id: number) => {
     await Product.destroy({
-      where:{
+      where: {
         id
       }
     })
 
+  },
+
+  getLimitProducts: async (offset: number, limit: number) => {
+    return await Product.findAll({
+      offset: offset,
+      limit: limit,
+    })
   }
 }
+
 
 
 

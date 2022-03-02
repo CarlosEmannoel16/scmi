@@ -7,7 +7,7 @@ const rowOptionsSaleCloseSale = document.querySelector('.rowOptionsSaleCloseSale
 window.onload = async () => {
  
   await loadAllProducts()
-F
+
 }
 
 

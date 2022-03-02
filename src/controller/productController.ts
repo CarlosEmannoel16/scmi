@@ -3,21 +3,58 @@ import { sequelize } from '../instances/mysql'
 import * as verification from '../helpers/verification'
 import * as formatNumber from '../helpers/formatNumber'
 import { productModelActions, ProductInstance } from '../models/Product'
-import validator from 'validator'
 
 
 
 export const product = async (req: Request, res: Response) => {
 
-  const productSearchResult = await productModelActions.getAllProducts()
+  let limit = 15
+  let page = parseInt(req.params.page)
+  let pageRange = page >= 1 ? page * limit : 1
+  let productSearchResult = await productModelActions.getLimitProducts(pageRange, limit)
+  let numberOfProducts = await productModelActions.getCountProduct()
+  let numberOfPages = Math.round(numberOfProducts / limit)
+  let numberViewOfPages = 5
+  let arrayPage: object[] = []
+
+  console.log(numberOfProducts)
+  console.log(numberViewOfPages)
+  if (page < 5) {
+    let index = 0
+    while (index < numberViewOfPages) {
+      index++
+      arrayPage.push({ 'page': index })
+    }
+  } else if (page >= 5) {
+
+    let limitPage = numberViewOfPages + page
+    let index = page - 3
+
+    while (index < limitPage ) {
+      console.log('jhjh')
+      if (index == numberOfPages) {
+        arrayPage.push({ 'page': index })
+        break
+      }
+      arrayPage.push({ 'page': index })
+      index++
+    }
+  }
+
 
 
   res.render("pages/products", {
-    productSearchResult
+    productSearchResult,
+    currentPage: page,
+    arrayPage
   })
+
+
 }
 export const newProductView = (req: Request, res: Response) => {
-  res.render("pages/product-add")
+  res.render("pages/product-add", {
+    valuesInput: true
+  })
 }
 
 export const newProduct = async (req: Request, res: Response) => {
@@ -30,28 +67,30 @@ export const newProduct = async (req: Request, res: Response) => {
   let quantity = req.body.quantity
   let number_category = req.body.number_category
   let minimum_quantity = req.body.minimum_quantity
+  let sucess = false
 
   if (description && price_buy && price_sale && quantity && number_category) {
-   
-      const productData: ProductInstance = {
-        description,
-        price_buy: formatNumber.removeSpecialCharactersAndConvertToFloat(price_buy),
-        price_sale: formatNumber.removeSpecialCharactersAndConvertToFloat(price_sale),
-        quantity,
-        number_category,
-        minimum_quantity
+    const productData: ProductInstance = {
+      description,
+      price_buy: formatNumber.removeSpecialCharactersAndConvertToFloat(price_buy),
+      price_sale: formatNumber.removeSpecialCharactersAndConvertToFloat(price_sale),
+      quantity,
+      number_category,
+      minimum_quantity
 
-      } as ProductInstance
-
-      await productModelActions.registerProduct(productData)
+    } as ProductInstance
+    await productModelActions.registerProduct(productData)
+    sucess = true
 
   } else {
-    req.flash('exceptions', 'Revise os Campos e tente novamente')
+    req.flash('errors', 'Ops!, Revise os Campos e tente novamente')
   }
 
   res.render("pages/product-add", {
     showAdd,
-    exception: req.flash('exceptions')
+    exception: res.locals.errors,
+    valuesInput: req.body,
+    sucess
   })
 
 

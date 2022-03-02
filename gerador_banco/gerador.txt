@@ -1,0 +1,26 @@
+for (let index = 0; index <100; index++) {
+
+    let valueInput = faker.commerce.price()
+    valueInput = parseInt(valueInput.replace(/[^0-9]/g, ''))
+    valueInput = (valueInput / 100).toFixed(2) + ''
+    valueInput = valueInput.replace('.', ',')
+    valueInput = valueInput.replace(/(\d)(\d{3})(\d{3}),/g, '$1. $2. $3,')
+    valueInput = valueInput.replace(/(\d)(\d{3}),/g, '$1.$2,')
+
+    let valueInput2 = faker.commerce.price()
+    valueInput2 = parseInt(valueInput2.replace(/[^0-9]/g, ''))
+    valueInput2 = (valueInput2 / 100).toFixed(2) + ''
+    valueInput2 = valueInput2.replace('.', ',')
+    valueInput2 = valueInput2.replace(/(\d)(\d{3})(\d{3}),/g, '$1. $2. $3,')
+    valueInput2 = valueInput2.replace(/(\d)(\d{3}),/g, '$1.$2,')
+
+   await productModelActions.registerProduct(
+      {
+      description: faker.commerce.productName(),
+      price_buy:  formatNumber.removeSpecialCharactersAndConvertToFloat(valueInput),
+      price_sale: formatNumber.removeSpecialCharactersAndConvertToFloat(valueInput2),
+      quantity: parseInt(faker.random.number()),
+      number_category: 1,
+      minimum_quantity: parseInt(faker.random.number()),
+    }as ProductInstance)
+  }

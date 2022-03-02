@@ -19,9 +19,14 @@
 
     {{#exception}}
     <div class="ui secondary inverted red segment">
-      <p>Ops, Algo deu errado revise os campos e tente novamente!</p>
+      <p>{{exception}}</p>
     </div>
     {{/exception}}
+    {{#sucess}}
+    <div class="ui secondary inverted sucess segment">
+      <p>Produto adicionado com sucesso! </p>
+    </div>
+    {{/sucess}}
 
 
 
@@ -35,26 +40,28 @@
           </div>
         </div>
         <div class="row bodyInfor">
-
+          {{#valuesInput}}
           <form class="ui form  form-add-product" method="post" action="/new-product">
             <div class="two fields">
               <div class="field">
                 <label for="">Descrição do produto</label>
-                <input type="text" name="description" placeholder="Descrição do produto">
+                <input type="text" name="description" placeholder="Descrição do produto" value="{{description}}">
               </div>
               <div class="field">
                 <label for="">Quantidade</label>
-                <input type="number" name="quantity" placeholder="Quantidade">
+                <input type="number" name="quantity" placeholder="Quantidade" value="{{quantity}}">
               </div>
             </div>
             <div class="two fields">
               <div class="field">
                 <label for="">Valor de Compra</label>
-                <input type="number" name="price_buy" id="price_buy" step="any" placeholder="Valor de Compra">
+                <input type="text" name="price_buy" id="price_buy" onkeyup="formatMoney(this)" step="any"
+                  placeholder="Valor de Compra"  value="{{price_buy}}">
               </div>
               <div class="field">
                 <label for="">Valor de Venda</label>
-                <input type="text" name="price_sale" step="any" placeholder="Valor de Venda">
+                <input type="text" name="price_sale" onkeyup="formatMoney(this)" id="price_sale" step="any"
+                  placeholder="Valor de Venda"   value="{{price_sale}}">
               </div>
             </div>
             <div class=" two fields filds margin-field-bottom">
@@ -73,7 +80,8 @@
 
             <button class="ui button" type="submit">Cadastrar</button>
             <button id="btnReturnAllProducts" class="ui secondary basic button ">Ver produtos</button>
-          </form> 
+            {{/valuesInput}}
+          </form>
         </div>
       </div>
       <div class="one wide column"> </div>

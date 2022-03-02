@@ -1,50 +1,52 @@
 
-$(document).ready(function(){
-  $('#price_buy').money('000.000.000')
-})
-
 
 let btnReturnAllProducts = document.getElementById('btnReturnAllProducts')
 
-if(btnReturnAllProducts){
-  btnReturnAllProducts.addEventListener('click', (event)=>{
+
+if (btnReturnAllProducts) {
+  btnReturnAllProducts.addEventListener('click', (event) => {
     event.preventDefault()
-    window.location.href="/product"
+    window.location.href = "/product"
   })
 }
 
-
-function redirectAllCustomers(){
-  window.location.href="/customers"
+function redirectAllCustomers() {
+  window.location.href = "/customers"
 }
 
-function redirectAllProducts(){
-  window.location.href="/product"
+function redirectAllProducts() {
+  window.location.href = "/product"
 }
 
-function redirectSale(){
-  window.location.href="/sale"
+function redirectSale() {
+  window.location.href = "/sale"
 }
 
-function submitModalEdit(){
+function submitModalEdit() {
   document.getElementById("formEdit").submit()
 }
 
-function DeeletProductAction(){
- document.getElementById('deleteButtonProduct').submit()
+function DeeletProductAction() {
+  document.getElementById('deleteButtonProduct').submit()
 }
 
 
-function submitProductSale(event){
- console.log(event.which)
+function submitProductSale(event) {
+  console.log(event.which)
 }
 
 
-
-
-
-
-
+function formatMoney(input){
+  let valueInput = input.value
+  if (valueInput) {
+    valueInput = parseInt(valueInput.replace(/[^0-9]/g, ''))
+    valueInput = (valueInput / 100).toFixed(2) + ''
+    valueInput = valueInput.replace('.', ',')
+    valueInput = valueInput.replace(/(\d)(\d{3})(\d{3}),/g, '$1. $2. $3,')
+    valueInput = valueInput.replace(/(\d)(\d{3}),/g, '$1.$2,')
+    input.value = 'R$ ' + valueInput
+  }
+}
 
 
 

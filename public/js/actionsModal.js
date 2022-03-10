@@ -11,7 +11,17 @@ $("#deleteButtonProduct").click(function () {
     ;
 })
 
+$("#closingSale").click(function(){
+  $('.finalizingSaleModal')
+  .modal('show')
+;
+})
 
+$('#modalSaleFast').click(function(){
+  $('.modalSaleFast')
+  .modal('show')
+;
+})
 
 
 

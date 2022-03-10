@@ -1,5 +1,6 @@
 .menu-backgroud{
-  background-image: linear-gradient(0deg, #2a2d3470 0%, #2a2d34 100%),url(/images/montanha.jpg);  
+  
+  background-color: #05232f !important;
 
 }
 

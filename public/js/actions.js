@@ -35,6 +35,10 @@ function submitProductSale(event) {
   console.log(event.which)
 }
 
+function redirectFinalizingSale(){
+ window.location.href = '/finalizing-Sale'
+}
+
 
 function formatMoney(input){
   let valueInput = input.value
@@ -49,4 +53,11 @@ function formatMoney(input){
 }
 
 
+
+function effectIconMenu(element){
+  $(element)
+  .transition('jiggle')
+  
+;
+}
 

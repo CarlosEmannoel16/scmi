@@ -19,7 +19,7 @@ hr{
 }
 
 .hrTitle{
-  background-color: #00b4fc;
+  background-color: #0c4055;
   height: 5px;
   border: none;
   
@@ -207,13 +207,25 @@ height: 200px;
 
 .area-left-pdv{
   background-color: #fff;
+  padding: 20px;
+  height: 80vh;
+ 
+}
+.area-center-pdv{
+  display: flex !important;
+  flex-direction: row ;
+  align-items: center;
+  background-color: #fff;
   padding: 10px;
   height: 80vh;
+  text-align: center;
+
 }
 .area-right-pdv{
   background-color: #fff;
-padding: 10px;
- height: 80vh;
+  padding: 20px;
+  height: 80vh;
+  text-align: center;
 }
 .title-pdv{
   display: flex !important;
@@ -221,11 +233,12 @@ padding: 10px;
   align-items: center;
   justify-content: center;
   height: 8vh;
-  background-color: #00b4fc;
+  background-color: #05232f;
   color: #fff;
   font-weight: bold;
   width: 100%;
   font-size: 2.5rem;
+ 
 }
 
 .title-pdv-product{
@@ -241,7 +254,8 @@ padding: 10px;
   height: 90%;
   width: 100%;
   background-color: #fff;
-  border: 3px solid #000;
+  border: 2px solid rgb(146, 146, 146);
+  border-radius: 10px;
   text-align: center;
 }
 
@@ -321,3 +335,75 @@ padding: 10px;
   align-items: center;
   justify-content: center;
 }
+
+.body-modal-finalizing{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.optionSaleButton{
+  width:100%;
+  height: 150px;
+  background-color: transparent;
+  border: 2px solid rgb(50, 50, 151);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  justify-content: center;
+  cursor: pointer;
+  background-size: 100%;
+  color:#fff;
+  transition: 0.7s;
+  background-image: url(/images/fundo-button.jpg);
+}
+
+.iconOptionSaleButtons{
+  width: 10%;
+
+}
+
+.optionSaleButton:hover{
+  border: 2px solid rgb(66, 66, 251);
+ 
+  color: #fff;
+}
+.optionSaleButton:hover .iconOptionSaleButtons {
+   width: 25%;
+}
+
+
+.area-sale-fast{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.body-end-sale{
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+}
+.body-end-sale button{
+  margin-left: 10px;
+}
+.amount-sale-fast{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+.title-sale-fast{
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+

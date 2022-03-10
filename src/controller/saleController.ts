@@ -2,17 +2,21 @@
 import { Request, Response } from 'express'
 import validator from 'validator'
 import { productModelActions } from '../models/Product'
-import flash from 'connect-flash'
-import { SaleActions } from '../models/Sale'
+import { SaleActions, SaleActionInstance } from '../models/Sale'
+import { removeSpecialCharactersAndConvertToFloat } from '../helpers/formatNumber'
 
 
 export const viewSale = async (req: Request, res: Response) => {
+  const options: SaleActions = {
+    req,
+    res,
+
+  } as SaleActions
+
   // const saleData = await Sale.findAll( {include:[{model:SaleDetails}], where:{id:3}}) 
   //req.session.destroy((Ferr) => { })
-  let Sale = new SaleActions(req, res)
+  let Sale = new SaleActions(options)
   console.log(Sale.getQuantitySession())
-
-
   res.render('pages/sale', {
 
   })
@@ -21,12 +25,23 @@ export const viewSale = async (req: Request, res: Response) => {
 export const saleVerificationProduct = async (req: Request, res: Response) => {
   let cod = req.body.cod
   let quantity = req.body.quantity
+
   if (validator.isInt(cod) && validator.isInt(quantity)) {
+
     let product = await productModelActions.getProductSale(cod)
 
     if (product) {
       parseInt(quantity)
-      let Sale = new SaleActions(req, res, cod, product, quantity)
+
+      const options: SaleActions = {
+        req,
+        res,
+        cod,
+        product,
+        quantity
+      } as SaleActions
+
+      let Sale = new SaleActions(options)
       if (Sale.insertInSession()) {
         res.json({
           session: Sale.getSessionToCustomer(),
@@ -41,32 +56,41 @@ export const saleVerificationProduct = async (req: Request, res: Response) => {
       }
       return true
     }
-
   }
   res.json({ statusAdd: 0, message: 'Produto não encontrado' })
-
 }
 
 
 export const saleDeleteProduct = async (req: Request, res: Response) => {
 
   let cod = req.body.cod
-  let Sale = new SaleActions(req, res, cod)
+
+
+  const options: SaleActions = {
+    req,
+    res,
+    cod,
+  } as SaleActions
+
+  let Sale = new SaleActions(options)
 
   if (validator.isInt(cod) && Sale.getProductSession().length > 0) {
     let status = Sale.deleteProduct()
     res.json({ statusSale: status })
   }
-
   if (req.body.search) {
 
   }
 }
 
-
-
 export const getAllProductsSession = async (req: Request, res: Response) => {
-  let Sale = new SaleActions(req, res)
+
+  const options: SaleActions = {
+    req,
+    res,
+  } as SaleActions
+
+  let Sale = new SaleActions(options)
   if (req.body.cod) {
     res.json({ status: true, session: Sale.getProductSession(), amountSale: Sale.sumAllProducts() })
   } else {
@@ -75,13 +99,94 @@ export const getAllProductsSession = async (req: Request, res: Response) => {
 }
 
 export const cancelSale = async (req: Request, res: Response) => {
-
   if (req.body.cod) {
-    req.session.destroy(item => item)
+
+    const options: SaleActions = {
+      req,
+      res,
+    } as SaleActions
+
+    let Sale = new SaleActions(options)
+    Sale.clearSession()
     res.json({ status: true })
   } else {
     res.json({ status: false })
   }
 }
 
+
+export const finalizingTheSale = async (req: Request, res: Response) => {
+
+  const options: SaleActions = {
+    req,
+    res,
+  } as SaleActions
+
+  let Sale = new SaleActions(options)
+  let allProductsSale = Sale.getProductSession()
+  let sumAllSale = Sale.sumAllProducts()
+
+
+  if (allProductsSale.length == 0) {
+    res.redirect('/sale')
+  } else {
+    res.render('pages/finalizing-sale', {
+      allProductsSale
+
+    })
+  }
+}
+
+export const finalizingTheSalePostFast = async (req: Request, res: Response) => {
+
+  let amountReceived = req.body.amountReceived ? removeSpecialCharactersAndConvertToFloat(req.body.amountReceived) : undefined
+ 
+  const options: SaleActions = {
+    req,
+    res,
+    amountReceived
+  } as SaleActions
+
+  let Sale = new SaleActions(options);
+  let sumAllProductsOrigin = Sale.sumAllProducts() ? Sale.sumAllProducts() : Sale.getfinalizingTheSaleSession().subtractedValue
+
+ 
+  let sumAllProducts = removeSpecialCharactersAndConvertToFloat(sumAllProductsOrigin)
+  console.log(sumAllProducts)
+  console.log(req.session.sale)
+
+
+  if (amountReceived) {
+    if (amountReceived <= sumAllProducts) {
+      console.log('passou aqui')
+      Sale.lowestTotalValue()
+      req.session.saleInProcess = true
+      let data = Sale.getProductSession()
+      data = data[0]
+      res.json({
+        data
+      })
+    } else {
+      res.json({ message: 'Valor Superior' })
+    }
+
+  } else {
+    if (Sale.sumAllProducts()) {
+      res.json({
+        data: { subtractedValue: Sale.sumAllProducts() }
+      })
+    } else {
+      let data = Sale.getfinalizingTheSaleSession()
+      res.json({
+        data
+      })
+    }
+
+
+  }
+
+
+
+
+}
 

@@ -1,24 +1,40 @@
-document.getElementById('inpuCodProduct').focus()
+if (document.getElementById('inpuCodProduct')) {
+  document.getElementById('inpuCodProduct').focus()
+}
 const inpuCodProduct = document.querySelector('#inpuCodProduct')
 const inputAddCodeArea = document.querySelector('.input-add-code')
 const areaLeftPdv = document.querySelector('.area-left-pdv')
 const rowOptionsSaleCloseSale = document.querySelector('.rowOptionsSaleCloseSale')
+const totalValueFinalizing = document.querySelector('.totalValueFinalizing')
 
 window.onload = async () => {
- 
   await loadAllProducts()
+  totalValueFinalizing.appendChild(document.createTextNode(await getTotalValue()))
 
 }
 
 
 //Funções 
 
-const productsInSession = () => {
-  document.querySelector('.freeBoxMessage').style.display = 'none'
+
+const getTotalValue = async (value) => {
+
+  const response = await fetch(`/finalizing-sale-fast`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+
+  let amountReceived = await response.json()
+  return amountReceived.data.subtractedValue
+
 }
 
-const noProductInSession = () => {
 
+
+const productsInSession = () => {
+  document.querySelector('.freeBoxMessage') ? document.querySelector('.freeBoxMessage').style.display = 'none' : ' '
 }
 
 
@@ -27,7 +43,7 @@ const loadAllProducts = async () => {
   if (products.session.length > 0) {
     productsInSession()
     addProductsOnViewOnload(products.session)
-    document.querySelector('.amountSale').innerHTML = products.amountSale
+    document.querySelector('.amountSale') ? document.querySelector('.amountSale').innerHTML = products.amountSale : ''
   } else {
     document.querySelector('.freeBoxMessage').style.display = 'flex'
     document.querySelector('.amountSale').innerHTML = ''
@@ -51,8 +67,6 @@ const requestGetAllProduct = async () => {
     } else {
       alert('produto não encontrado')
     }
-
-
 
   } catch (err) {
     console.log(err)
@@ -122,7 +136,7 @@ const createLine = async (product) => {
   tr.insertAdjacentElement('beforeend', tdValueAmount)
 
   const areaInforProducts = document.querySelector('.pdv-infor-products-table')
-  areaInforProducts.appendChild(tr);
+  areaInforProducts ? areaInforProducts.appendChild(tr) : ''
 
 }
 
@@ -198,85 +212,110 @@ let closeSale = () => {
 }
 
 //Eventos de click
+let closingSale = document.querySelector('#closingSale')
+let btnQuantityProductSale = document.querySelector('#btnQuantityProductSale')
+let cancelSale = document.querySelector('#cancelSale')
+let btnDeleteProductSale = document.querySelector('#btnDeleteProductSale')
 
-document.querySelector('#closingSale').addEventListener('click', async () => {
-  rowOptionsSaleCloseSale.style.display = 'block'
-  areaLeftPdv.remove()
-  inputAddCodeArea.remove()
-})
-
-document.querySelector('#btnQuantityProductSale').addEventListener('click', () => {
-
-  let inputQuantity = document.createElement('input')
-  inputQuantity.setAttribute('type', 'text')
-  inputQuantity.setAttribute('class', 'inputQuantitySale')
-
-  var buttonQuantity = document.querySelector('#btnQuantityProductSale')
-  let columnQuantity = document.querySelector('#columnQuantity')
-  columnQuantity.removeChild(buttonQuantity)
-  columnQuantity.appendChild(inputQuantity)
-  inputQuantity.focus()
-  document.getElementById('inpuCodProduct')
+if (closingSale && cancelSale) {
 
 
-  inputQuantity.addEventListener('blur', function () {
-    columnQuantity.removeChild(inputQuantity)
-    columnQuantity.appendChild(buttonQuantity)
-    document.getElementById('inpuCodProduct').focus()
+  closingSale.addEventListener('click', async () => {
+    rowOptionsSaleCloseSale.style.display = 'block'
+    areaLeftPdv.remove()
+    inputAddCodeArea.remove()
   })
-})
+
+  btnQuantityProductSale.addEventListener('click', () => {
+
+    let inputQuantity = document.createElement('input')
+    inputQuantity.setAttribute('type', 'text')
+    inputQuantity.setAttribute('class', 'inputQuantitySale')
+
+    var buttonQuantity = document.querySelector('#btnQuantityProductSale')
+    let columnQuantity = document.querySelector('#columnQuantity')
+    columnQuantity.removeChild(buttonQuantity)
+    columnQuantity.appendChild(inputQuantity)
+    inputQuantity.focus()
+    document.getElementById('inpuCodProduct')
 
 
-
-document.querySelector('#cancelSale').addEventListener('click', () => {
-  clearSession()
-  document.location.reload(true)
-})
-
-
-document.querySelector('#cancelSale').addEventListener('click', async () => {
-  await requestCancelSale()
-  cleanLine()
-
-})
-
-window.addEventListener('keypress', async (event) => {
-
-  const inputDelete = document.querySelector('.inputDeleteSale')
-  const inputProduct = document.getElementById('inpuCodProduct')
-
-  if (inputProduct.value && event.key) {
-    document.querySelector('.input-add-code').classList.add('loading')
-  } else {
-    document.querySelector('.input-add-code').classList.remove('loading')
-  }
-
-  await getCodeAndRequest(event, inputProduct, inputDelete)
-  if (inputDelete) {
-    await deleteProductSale(event, inputDelete.value, inputDelete, inputProduct)
-  }
-
-
-
-})
-
-document.querySelector('#btnDeleteProductSale').addEventListener('click', () => {
-
-  let inputDelete = document.createElement('input')
-  inputDelete.setAttribute('type', 'text')
-  inputDelete.setAttribute('class', 'inputDeleteSale')
-
-  var buttonDeleteProduct = document.querySelector('#btnDeleteProductSale')
-  let columnDeleteProduct = document.querySelector('#columnDeleteProduct')
-  columnDeleteProduct.removeChild(buttonDeleteProduct)
-  columnDeleteProduct.appendChild(inputDelete)
-  inputDelete.focus()
-  document.getElementById('inpuCodProduct').value = ''
-
-
-  inputDelete.addEventListener('blur', function () {
-    columnDeleteProduct.removeChild(inputDelete)
-    columnDeleteProduct.appendChild(buttonDeleteProduct)
-    document.getElementById('inpuCodProduct').focus()
+    inputQuantity.addEventListener('blur', function () {
+      columnQuantity.removeChild(inputQuantity)
+      columnQuantity.appendChild(buttonQuantity)
+      document.getElementById('inpuCodProduct').focus()
+    })
   })
+
+
+
+  cancelSale.addEventListener('click', async () => {
+    await requestCancelSale()
+    cleanLine()
+
+  })
+
+  window.addEventListener('keypress', async (event) => {
+
+    const inputDelete = document.querySelector('.inputDeleteSale')
+    const inputProduct = document.getElementById('inpuCodProduct')
+
+    if (inputProduct.value && event.key) {
+      document.querySelector('.input-add-code').classList.add('loading')
+    } else {
+      document.querySelector('.input-add-code').classList.remove('loading')
+    }
+
+    await getCodeAndRequest(event, inputProduct, inputDelete)
+    if (inputDelete) {
+      await deleteProductSale(event, inputDelete.value, inputDelete, inputProduct)
+    }
+
+
+
+  })
+
+
+  btnDeleteProductSale.addEventListener('click', () => {
+
+    let inputDelete = document.createElement('input')
+    inputDelete.setAttribute('type', 'text')
+    inputDelete.setAttribute('class', 'inputDeleteSale')
+
+    var buttonDeleteProduct = document.querySelector('#btnDeleteProductSale')
+    let columnDeleteProduct = document.querySelector('#columnDeleteProduct')
+    columnDeleteProduct.removeChild(buttonDeleteProduct)
+    columnDeleteProduct.appendChild(inputDelete)
+    inputDelete.focus()
+    document.getElementById('inpuCodProduct').value = ''
+
+
+    inputDelete.addEventListener('blur', function () {
+      columnDeleteProduct.removeChild(inputDelete)
+      columnDeleteProduct.appendChild(buttonDeleteProduct)
+      document.getElementById('inpuCodProduct').focus()
+    })
+  })
+
+}
+
+
+let btnProcessSale = document.querySelector("#btnProcessSale")
+btnProcessSale == undefined ? '' : btnProcessSale.addEventListener('click', async () => {
+
+  let amountReceived = document.querySelector("#amountReceivedFast").value
+
+  let response = await fetch('/finalizing-sale-fast', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ amountReceived })
+  }
+  )
+
+  lowestTotalValue = await response.json()
+ 
+  totalValueFinalizing.innerHTML = ''
+  totalValueFinalizing.appendChild(document.createTextNode(await getTotalValue()))
 })

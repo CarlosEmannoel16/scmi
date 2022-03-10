@@ -56,12 +56,13 @@ export { Sale }
 
 
 
-interface SaleActionInstance {
+export interface SaleActionInstance {
   product?: ProductInstance | undefined
   quantity?: number
   req: Request
   res: Response
   cod?: number
+  amountReceived?: number
 }
 
 
@@ -70,25 +71,34 @@ export interface quantitySaleInterface {
   quantityStock: number
 }
 
+export interface finalizingTheSaleInterface {
+  products: any[],
+  subtractedValue: string
+
+}
+
 export class SaleActions implements SaleActionInstance {
   product?: ProductInstance
   quantity?: number
   req: Request
   res: Response
   cod?: number
+  amountReceived?: number
 
 
-  constructor(req: Request, res: Response, cod: number | undefined = undefined, product: ProductInstance | undefined = undefined, quantity: number = 1) {
-    this.product = product
-    this.quantity = quantity
-    this.req = req
-    this.res = res
-    this.cod = cod
+  constructor(options: SaleActions) {
+
+    this.product = options.product
+    this.quantity = options.quantity
+    this.req = options.req
+    this.res = options.res
+    this.cod = options.cod
+    this.amountReceived = options.amountReceived
 
   }
 
 
-  verifyQuantityProduct(): boolean | undefined{
+  verifyQuantityProduct(): boolean | undefined {
 
     if (this.product && this.quantity) {
 
@@ -109,13 +119,13 @@ export class SaleActions implements SaleActionInstance {
           }
         })
 
-      }else{
+      } else {
         verify = quantityAdd <= this.product.quantity ? true : false
       }
-     
+
       return verify
     }
-  
+
   }
 
   deleteProduct(): boolean {
@@ -221,9 +231,6 @@ export class SaleActions implements SaleActionInstance {
     return dataQuantity
   }
 
-
-
-
   prepareProductToSession(): boolean | any {
     if (this.product) {
       if (this.verifyQuantityProduct()) {
@@ -253,7 +260,11 @@ export class SaleActions implements SaleActionInstance {
 
   }
 
-  sumAllProducts() {
+  clearSession() {
+    this.req.session.sale = [];
+  }
+
+  sumAllProducts(): string {
     let products = this.getProductSession()
     if (products.length > 1) {
       let productsAmount = products.map(item => removeSpecialCharactersAndConvertToFloat(item.amount))
@@ -263,15 +274,67 @@ export class SaleActions implements SaleActionInstance {
 
       return formatMoney(productsAmount)
     } else if (products.length == 1) {
-      return products.map(item => item.amount)
+      return products.map(item => item.amount).toString()
     } else {
-      return 0
+      return ''
+    }
+  }
+
+  lowestTotalValue() {
+    let amountReceived = this.amountReceived
+
+
+    if (amountReceived && amountReceived > 0) {
+      let sumAllProducts = this.sumAllProducts()
+      if (sumAllProducts != '') {
+        let amountTotal = removeSpecialCharactersAndConvertToFloat(this.sumAllProducts())
+        console.log('AmountTotal da função', amountTotal)
+        let subtractedValueOrigin = amountTotal - amountReceived
+        console.log('subtractedValueOrigin', subtractedValueOrigin)
+
+        if (subtractedValueOrigin > 1) {
+          subtractedValueOrigin
+        } else {
+          subtractedValueOrigin.toFixed(2)
+        }
+
+        let subtractedValue = formatMoney(subtractedValueOrigin)
+        console.log('subtractedValue', subtractedValue)
+        let session = [{ products: this.getProductSession(), subtractedValue }]
+        this.req.session.sale = session
+      } else {
+
+        let subtractedValueOrigin = removeSpecialCharactersAndConvertToFloat(this.getProductSession()[0].subtractedValue)
+
+        subtractedValueOrigin = subtractedValueOrigin - amountReceived
+        let products = this.getProductSession()[0].products
+        if (subtractedValueOrigin > 1) {
+          subtractedValueOrigin
+        } else {
+          subtractedValueOrigin.toFixed(2)
+        }
+
+        let subtractedValue = formatMoney(subtractedValueOrigin)
+
+        let prepareSession: finalizingTheSaleInterface = {
+          products,
+          subtractedValue
+        }
+        let session = [prepareSession]
+        this.req.session.sale = session
+      }
     }
   }
 
 
+  getfinalizingTheSaleSession() {
+    let data: finalizingTheSaleInterface = this.getProductSession()[0]
+    return data
+  }
+
 
   insertInSession() {
+
     if (this.verifyQuantityProduct()) {
       let dataSession = this.getProductSession()
       let dataProduct = this.prepareProductToSession()

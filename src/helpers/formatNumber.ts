@@ -1,4 +1,4 @@
-export const removeSpecialCharactersAndConvertToFloat = (value: string) => {
+export const removeSpecialCharactersAndConvertToFloat = (value: string ): number => {
 
   return parseFloat(value.replace('R$', '').replace('.', '').replace(',', '.'))
 

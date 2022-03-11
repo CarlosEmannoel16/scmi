@@ -7,8 +7,9 @@
     "node": "16.x"
   },
   "scripts": {
+    "tsc": "tsc",
     "start": "node dist/server.js",
-    "postinstall":"tsc && copyfiles -u 1 src/**/*mustache dist/",
+    "postinstall": "npm run tsc && copyfiles -u 1 src/**/*mustache dist/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "nodemon -e ts,json,mustache,css src/server.ts"
   },
@@ -33,6 +34,7 @@
     "mustache-express": "^1.3.2",
     "mysql2": "^2.3.3",
     "sequelize": "^6.12.1",
+    "typescript": "^4.6.2",
     "validator": "^13.7.0"
   }
 }

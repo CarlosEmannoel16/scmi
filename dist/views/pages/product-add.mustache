@@ -1,0 +1,112 @@
+{{>partials/header}}
+<div class="column ">
+
+  <div class="ui teen column centered grid">
+    <div class="row rowTitle">
+      Online Agora
+    </div>
+    <div class="tow column centered row ">
+      <div class="row">
+        <h1>Cadastro de Produtos</h1>
+      </div>
+      <div class="ui divider"></div>
+    </div>
+  </div>
+
+
+  <div class="ui centered grid">
+
+
+    {{#exception}}
+    <div class="ui secondary inverted red segment">
+      <p>{{exception}}</p>
+    </div>
+    {{/exception}}
+    {{#sucess}}
+    <div class="ui secondary inverted sucess segment">
+      <p>Produto adicionado com sucesso! </p>
+    </div>
+    {{/sucess}}
+
+
+
+    <div class="row">
+      <div class=" areaAllInfor seven wide column shadow-all paddingPrimary">
+        <hr class="hrTitle">
+
+        <div class="row titleInfor">
+          <div class="column" style="text-align: left;">
+            <h3> <i class="fas fa-info-circle"></i> Dados do Produto</h3>
+          </div>
+        </div>
+        <div class="row bodyInfor">
+          {{#valuesInput}}
+          <form class="ui form  form-add-product" method="post" action="/new-product">
+            <div class="two fields">
+              <div class="field">
+                <label for="">Descrição do produto</label>
+                <input type="text" name="description" placeholder="Descrição do produto" value="{{description}}">
+              </div>
+              <div class="field">
+                <label for="">Quantidade</label>
+                <input type="number" name="quantity" placeholder="Quantidade" value="{{quantity}}">
+              </div>
+            </div>
+            <div class="two fields">
+              <div class="field">
+                <label for="">Valor de Compra</label>
+                <input type="text" name="price_buy" id="price_buy" onkeyup="formatMoney(this)" step="any"
+                  placeholder="Valor de Compra"  value="{{price_buy}}">
+              </div>
+              <div class="field">
+                <label for="">Valor de Venda</label>
+                <input type="text" name="price_sale" onkeyup="formatMoney(this)" id="price_sale" step="any"
+                  placeholder="Valor de Venda"   value="{{price_sale}}">
+              </div>
+            </div>
+            <div class=" two fields filds margin-field-bottom">
+              <div class="field">
+                <label for="">Categorias</label>
+                <select name="number_category" class="ui fluid dropdown" id="">
+                  <option value="1">Categoria 1</option>
+                  <option value="2">Categoria 2</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="">Quantidade Minima em estoque</label>
+                <input type="number" name="minimum_quantity" step="any" placeholder="Quantidade Minim em estoque">
+              </div>
+            </div>
+
+            <button class="ui button" type="submit">Cadastrar</button>
+            <button id="btnReturnAllProducts" class="ui secondary basic button ">Ver produtos</button>
+            {{/valuesInput}}
+          </form>
+        </div>
+      </div>
+      <div class="one wide column"> </div>
+      <div class="areaAllInfor seven wide column shadow-all">
+        <hr class="hrTitle">
+        <div class="row titleInfor">
+          Informações do fornecedor
+        </div>
+        <div class="row bodyInfor">
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+{{#showAdd}}
+<script>
+  alert('Produto Adicionado com Sucesso')
+  window.location.href = "/product"
+</script>
+{{/showAdd}}
+
+
+{{>partials/footer}}

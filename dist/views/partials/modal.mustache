@@ -1,0 +1,88 @@
+{{#product}}
+<div class="ui modal bodyModal modalEdit">
+
+  <div class="header headerModal">
+    Editar produto
+  </div>
+  <div class="ui grid ">
+    <div class="three wide column areaImageEdit">
+      <div class="image content">
+        <div class="ui small image">
+          <img src="/images/product.jpg">
+        </div>
+      </div>
+    </div>
+    <div class="thirteen wide column">
+
+
+      <form class="ui form  form-add-product" method="post" id="formEdit" action="/edit-product/{{id}}">
+
+        <div class="field">
+          <label for="">Descrição do produto </label>
+          <input type="text" name="description" value="{{description}}" placeholder="Descrição do produto">
+        </div>
+        <div class="fields">
+          <div class="field">
+            <label for="">Valor de Compra</label>
+            <input type="text" name="price_buy" onkeyup="formatMoney(this)" value="{{price_buy}}" step="any" placeholder="Valor de Compra">
+          </div>
+          <div class="field">
+            <label for="">Valor de Venda</label>
+            <input type="text" name="price_sale" onkeyup="formatMoney(this)" value="{{price_sale}}" step="any" placeholder="Valor de Venda">
+          </div>
+          <div class="field">
+            <label for="">Quantidade</label>
+            <input type="number" name="quantity" value={{quantity}} placeholder="Quantidade">
+          </div>
+        </div>
+
+        <div class="fields margin-field-bottom">
+          <div class="field">
+            <label for="">Categorias</label>
+            <select name="number_category" class="ui fluid dropdown" id="">
+              <option value="1">Categoria 1</option>
+              <option value="2">Categoria 2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="">Quantidade Mínima em estoque</label>
+            <input type="number" name="minimum_quantity" value={{minimum_quantity}} placeholder="Quantidade Mínima em estoque">
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="ui black deny button">
+            Voltar
+          </div>
+          <div class="ui positive right labeled icon button" onclick="submitModalEdit()">
+            Alterar
+            <i class="checkmark icon"></i>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div class="ui mini modal">
+
+  <div class="header">
+    Você tem certeza que deseja excluir este produto?
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <i class="fas fa-trash-alt fa-5x"></i>
+    </div>
+    <div class="actions">
+      <button class="ui negative basic button">Não</button>
+      <form action="/deleteProduct/{{id}}" method="get">
+
+        <button class="ui cancel primary button" id="deleteButtonProduct">Excluir</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{{/product}}

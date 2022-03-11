@@ -1,0 +1,42 @@
+{{>partials/header}}
+<div class="row row-all-products">
+  <div class="ui right aligned category search" id="areaSearchProducts">
+    <div class="ui icon input">
+      <form action="/search-product" method="get">
+        <div class="ui icon input">
+          <input type="text" name="searchProduct" placeholder="Procurar">
+        </div>
+      </form>
+      {{#showButtonReturn}}
+      <button onclick="redirectAllProducts()" class="ui blue basic button">Voltar</button>
+      {{/showButtonReturn}}
+    </div>
+  </div>
+
+  <table class="ui selectable  table">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>quantidade</th>
+        <th>Valor</th>
+        <th>Visualizar</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {{>partials/productTableResult}}
+
+    </tbody>
+
+  </table>
+
+  <div class="pagination">
+    <div class="ui borderless menu">
+     {{#arrayPage}} <a class="item" href="/product/{{page}}">{{page}}</a>{{/arrayPage}}
+     
+    </div>
+  </div>
+ 
+</div>
+{{>partials/footer}}

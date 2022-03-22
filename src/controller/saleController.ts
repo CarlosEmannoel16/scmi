@@ -2,8 +2,10 @@
 import { Request, Response } from 'express'
 import validator from 'validator'
 import { productModelActions } from '../models/Product'
-import { SaleActions, SaleActionInstance } from '../models/Sale'
+import { SaleActions, SaleActionInstance, idAndProducstSaleInteface } from '../models/Sale'
 import { removeSpecialCharactersAndConvertToFloat } from '../helpers/formatNumber'
+import { actionsSaleFast } from '../models/SaleFast'
+import { ActionsSaleDetailsFast } from '../models/SaleDetaisFast'
 
 
 export const viewSale = async (req: Request, res: Response) => {
@@ -64,8 +66,6 @@ export const saleVerificationProduct = async (req: Request, res: Response) => {
 export const saleDeleteProduct = async (req: Request, res: Response) => {
 
   let cod = req.body.cod
-
-
   const options: SaleActions = {
     req,
     res,
@@ -117,6 +117,8 @@ export const cancelSale = async (req: Request, res: Response) => {
 
 export const finalizingTheSale = async (req: Request, res: Response) => {
 
+
+
   const options: SaleActions = {
     req,
     res,
@@ -139,8 +141,10 @@ export const finalizingTheSale = async (req: Request, res: Response) => {
 
 export const finalizingTheSalePostFast = async (req: Request, res: Response) => {
 
+
   let amountReceived = req.body.amountReceived ? removeSpecialCharactersAndConvertToFloat(req.body.amountReceived) : undefined
- 
+
+
   const options: SaleActions = {
     req,
     res,
@@ -150,21 +154,26 @@ export const finalizingTheSalePostFast = async (req: Request, res: Response) => 
   let Sale = new SaleActions(options);
   let sumAllProductsOrigin = Sale.sumAllProducts() ? Sale.sumAllProducts() : Sale.getfinalizingTheSaleSession().subtractedValue
 
- 
   let sumAllProducts = removeSpecialCharactersAndConvertToFloat(sumAllProductsOrigin)
-  console.log(sumAllProducts)
-  console.log(req.session.sale)
-
 
   if (amountReceived) {
+
     if (amountReceived <= sumAllProducts) {
-      console.log('passou aqui')
       Sale.lowestTotalValue()
       req.session.saleInProcess = true
-      let data = Sale.getProductSession()
-      data = data[0]
+      let sumAllProducts =  removeSpecialCharactersAndConvertToFloat(Sale.getfinalizingTheSaleSession().subtractedValue)
+
+      if (sumAllProducts == 0) {
+
+        let idSaleFast = await actionsSaleFast.addSaleFast()
+        
+        let products = Sale.getProductsAndIdForFinalizingSale()
+        console.log(products)
+        await ActionsSaleDetailsFast.addSaleDetails(idSaleFast, products)  
+      }
+
       res.json({
-        data
+        sumAllProducts
       })
     } else {
       res.json({ message: 'Valor Superior' })
@@ -184,9 +193,5 @@ export const finalizingTheSalePostFast = async (req: Request, res: Response) => 
 
 
   }
-
-
-
-
 }
 

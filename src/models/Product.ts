@@ -1,5 +1,9 @@
-import { Model, DataTypes, Op, where, Sequelize } from 'sequelize'
-import { sequelize, } from '../instances/mysql'
+import { rejects } from 'assert'
+import { resolve } from 'path'
+import { Model, DataTypes, Op, QueryTypes } from 'sequelize'
+import { sequelize } from '../instances/mysql'
+import { actionsModelSaleDetails } from './SaleDetails'
+import { ActionsSaleDetailsFast } from './SaleDetaisFast'
 
 export interface ProductInstance extends Model {
   id: number,
@@ -10,6 +14,9 @@ export interface ProductInstance extends Model {
   number_category: number,
   minimum_quantity: number
 }
+
+
+
 export const Product = sequelize.define<ProductInstance>('Product',
   {
     id: {
@@ -52,8 +59,7 @@ export const productModelActions = {
 
 
   getCountProduct: async () => {
-  return  await Product.count()
-   
+    return await Product.count()
   },
 
   getProductSale: async (id: number) => {
@@ -63,8 +69,10 @@ export const productModelActions = {
         id
       }
     })
+
   },
   getProductById: async (idOfProducts: number) => {
+    console.log("Pegando o id")
     return await Product.findOne({
       where: {
         id: idOfProducts
@@ -118,7 +126,6 @@ export const productModelActions = {
         id
       }
     })
-
   },
 
   getLimitProducts: async (offset: number, limit: number) => {
@@ -126,7 +133,26 @@ export const productModelActions = {
       offset: offset,
       limit: limit,
     })
+  },
+
+  removerProductFromStock: async (quantity: number, id: number) => {
+
+    let query = `UPDATE products SET quantity = '${quantity}' WHERE id = ${id}`
+    await sequelize.query(query, {
+      type: QueryTypes.UPDATE
+    })
+  },
+
+
+  getCountOfProductsSold: async (idProduct: number) => {
+
+    let countSales = await actionsModelSaleDetails.getAmountOfSalesById(idProduct)
+    let countSalesFast = await ActionsSaleDetailsFast.getAmountOfSalesById(idProduct)
+    return countSalesFast + countSales
+
   }
+
+
 }
 
 

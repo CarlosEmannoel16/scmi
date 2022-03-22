@@ -8,15 +8,16 @@
   </div>
 </div>
 <div class="ui five column centered grid" style="margin-top:20px; padding: 0;">
-  <div class=" column cardsProduct color-1 shadow-all">
-    <div class="">
-      <h1 class="color-white">
-        123
+  <div class=" column cardsProduct color-1 shadow-all" id="card1Products">
+      <h1 class="color-white h2">
+        {{#salesAmount}}
+          {{salesAmount}}
+        {{/salesAmount}}
       </h1>
-      <span class="color-white">
+      <span class="color-white-tranaprent">
         Vendas desse Produto
       </span>
-    </div>
+   
     <div class="row option-card">
       Nova Venda +
     </div>
@@ -129,6 +130,13 @@
       </div>
 
       <div class="row bodyInfor">
+
+
+        {{#checkStockExist}}
+        <div class="ui red visible message">
+          Produto sem estoque!
+        </div>
+        {{/checkStockExist}}
 
         {{#checkStock}}
         <div class="ui visible message">

@@ -8,6 +8,10 @@ export const checkIfStockIsLow = (quantityInStock: number, minimumAmountAllowed:
   return quantityInStock <= minimumAmountAllowed ? true : false
 }
 
+export const checkIfStockExiste = (quantityInStock: number) => {
+  return quantityInStock == 0 ? true : false
+}
+
 export const checkProfit = (priceBuy: number, priceSale: number) => {
 
   let profit = removeSpecialCharactersAndConvertToFloat(priceSale.toString()) - removeSpecialCharactersAndConvertToFloat(priceBuy.toString())

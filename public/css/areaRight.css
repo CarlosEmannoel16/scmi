@@ -31,14 +31,14 @@ hr{
 
 
 .color-1{
-  background-color:#00b4fc;
+  background-color:#6675f8;
 }
 .color-1-secundary{
   background-color:#65d3ff;
 }
 .color-2{
   background-color: #e7204e;
-}
+} 
 
 .color-3{
   background-color: #f76e2a;
@@ -154,8 +154,25 @@ hr{
 }
 
 .cardsProduct{
- margin: 5px 10px 5px 10px;
-height: 200px;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content:flex-start;
+  margin: 5px 17px 5px 17px;
+  border-radius: 5px;
+  height: 150px;
+}
+
+.cardsProduct:hover{
+  background-color: rgb(47, 47, 47);
+}
+
+#card1Products{
+  background-image: url(/images/sales.png);
+  background-repeat: no-repeat;
+  background-size: 30% 70%;
+  background-position: 10px 98%;
+
 }
 
 .option-card{

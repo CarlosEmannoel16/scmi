@@ -1,5 +1,5 @@
 import { sequelize } from "../instances/mysql";
-import { Model, DataTypes, Op, where } from 'sequelize'
+import { Model, DataTypes, Op, where,  } from 'sequelize'
 
 export interface CustomerInstance extends Model {
   first_name: string,

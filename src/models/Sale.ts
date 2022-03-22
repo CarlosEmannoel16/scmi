@@ -2,7 +2,9 @@ import { Request, Response } from 'express'
 import { Model, DataTypes, } from 'sequelize'
 import { sequelize } from '../instances/mysql'
 import { SaleDetails, SaleDetailsInstance } from './SaleDetails'
+
 import { ProductInstance } from './Product'
+
 
 import { removeSpecialCharactersAndConvertToFloat, formatMoney } from '../helpers/formatNumber'
 
@@ -74,7 +76,13 @@ export interface quantitySaleInterface {
 export interface finalizingTheSaleInterface {
   products: any[],
   subtractedValue: string
+}
 
+
+
+export interface idAndProducstSaleInteface {
+  id_product: number,
+  quantity: number,
 }
 
 export class SaleActions implements SaleActionInstance {
@@ -132,16 +140,39 @@ export class SaleActions implements SaleActionInstance {
     let status = false
     if (this.cod) {
       let productsSesison = this.getProductSession()
+      let sessionQuantity = this.getQuantitySession()
+
       productsSesison.map((item, index) => {
         if (item.idUnique == this.cod) {
+
+          sessionQuantity.map((itemQuantity, indexQuantity) => {
+            if (itemQuantity.id == item.id) {
+              if (itemQuantity.quantityStock == 0) {
+                sessionQuantity.splice(indexQuantity, 1)
+              } else {
+                console.log('passou aqui')
+                itemQuantity.quantityStock = itemQuantity.quantityStock + parseInt(item.quantitySale)
+                return
+
+              }
+            }
+          })
           productsSesison.splice(index, 1)
           status = true
           return
         }
       })
+
+
+
+      console.log(sessionQuantity)
+      console.log(productsSesison)
       this.req.session.sale = productsSesison
-      return status
+
+
     }
+
+
     return status
   }
 
@@ -218,9 +249,9 @@ export class SaleActions implements SaleActionInstance {
   getSessionToCustomer() {
 
     let products = this.getProductSession()
-    let dataProductsForCustomer = products.map((item) => {
-      delete item.quantityStock
-      return item
+    return products.map((item) => {
+      delete item.quantityInStock
+
     })
   }
 
@@ -261,7 +292,9 @@ export class SaleActions implements SaleActionInstance {
   }
 
   clearSession() {
-    this.req.session.sale = [];
+    this.req.session.destroy(function (err) {
+      console.log(err)
+    })
   }
 
   sumAllProducts(): string {
@@ -282,15 +315,11 @@ export class SaleActions implements SaleActionInstance {
 
   lowestTotalValue() {
     let amountReceived = this.amountReceived
-
-
     if (amountReceived && amountReceived > 0) {
       let sumAllProducts = this.sumAllProducts()
       if (sumAllProducts != '') {
         let amountTotal = removeSpecialCharactersAndConvertToFloat(this.sumAllProducts())
-        console.log('AmountTotal da função', amountTotal)
         let subtractedValueOrigin = amountTotal - amountReceived
-        console.log('subtractedValueOrigin', subtractedValueOrigin)
 
         if (subtractedValueOrigin > 1) {
           subtractedValueOrigin
@@ -327,9 +356,19 @@ export class SaleActions implements SaleActionInstance {
   }
 
 
+
   getfinalizingTheSaleSession() {
     let data: finalizingTheSaleInterface = this.getProductSession()[0]
     return data
+  }
+
+  getProductsAndIdForFinalizingSale() {
+    let prapared: idAndProducstSaleInteface[]
+    let data = this.getfinalizingTheSaleSession().products
+    prapared = data.map((element) => {
+      return { id_product: element.id, quantity: element.quantitySale }
+    })
+    return prapared
   }
 
 
@@ -341,7 +380,11 @@ export class SaleActions implements SaleActionInstance {
       dataSession.unshift(dataProduct)
       this.req.session.sale = dataSession
       this.updateQuantityProduct()
+
+
       return true
+
+
     }
     return false
   }

@@ -3,14 +3,18 @@ import { sequelize } from '../instances/mysql'
 import * as verification from '../helpers/verification'
 import * as formatNumber from '../helpers/formatNumber'
 import { productModelActions, ProductInstance } from '../models/Product'
+import { actionsModelSaleDetails } from '../models/SaleDetails'
+import { ActionsSaleDetailsFast } from '../models/SaleDetaisFast'
 
 
 
 export const product = async (req: Request, res: Response) => {
 
+ 
+
   let limit = 15
   let page = parseInt(req.params.page)
-  let pageRange = page >= 1 ? page * limit : 1
+  let pageRange = page > 1 ? page * limit : 1
   let productSearchResult = await productModelActions.getLimitProducts(pageRange, limit)
   let numberOfProducts = await productModelActions.getCountProduct()
   let numberOfPages = Math.round(numberOfProducts / limit)
@@ -105,10 +109,15 @@ export const getProductById = async (req: Request, res: Response) => {
     if (product) {
       let checkStock = verification.checkIfStockIsLow(product.quantity, product.minimum_quantity)
       let checkProfit = verification.checkProfit(product.price_buy, product.price_sale)
+      let checkStockExist = verification.checkIfStockExiste(product.quantity)
+      let salesAmount = await productModelActions.getCountOfProductsSold(product.id)
+      console.log(salesAmount)
       res.render('pages/products-view', {
         product,
         checkStock,
-        checkProfit
+        checkStockExist,
+        checkProfit,
+        salesAmount
       })
     } else {
       res.redirect('/product')
@@ -176,7 +185,7 @@ export const editProductAction = async (req: Request, res: Response) => {
 
     }
   }
-  res.redirect('/product')
+  res.redirect(`/products/${id}`)
 }
 
 export const deleteProductAction = async (req: Request, res: Response) => {
@@ -184,7 +193,7 @@ export const deleteProductAction = async (req: Request, res: Response) => {
   let id: number = parseInt(req.params.id)
   if (id) {
     await productModelActions.deleteProductById(id)
-    res.redirect('/product')
+    res.redirect('/product/1')
   }
 
 }

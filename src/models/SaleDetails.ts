@@ -31,3 +31,17 @@ export const SaleDetails = sequelize.define<SaleDetailsInstance>('saleDetails',
 SaleDetails.removeAttribute('id')
 
 
+export const actionsModelSaleDetails = {
+
+
+  getAmountOfSalesById: async(id: number)=>{
+
+    return await SaleDetails.sum('quantity',{
+      where:{
+        id_product: id
+      }
+    })
+    
+  }
+
+}
